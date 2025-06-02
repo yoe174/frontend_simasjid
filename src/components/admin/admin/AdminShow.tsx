@@ -1,76 +1,3 @@
-// src\components\admin\admin\AdminShow.tsx
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import { useParams } from "next/navigation";
-// import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-// import { ShowcaseSection } from "@/components/Layouts/showcase-section";
-
-// type Role = {
-//   role_id: number;
-//   role_name: string;
-// };
-
-// export default function ShowAdminPage() {
-//   const { id } = useParams();
-//   const [user, setUser] = useState<{
-//     name: string;
-//     email: string;
-//     role_id: string;
-//     role_name?: string;
-//   } | null>(null);
-
-//   const [error, setError] = useState("");
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchUser = async () => {
-//       try {
-//         const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/${id}`);
-//         const data = await res.json();
-//         setUser(data);
-//       } catch (err) {
-//         setError("Gagal memuat data user");
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchUser();
-//   }, [id]);
-
-//   return (
-//     <>
-//       <Breadcrumb pageName="Detail Admin" />
-
-//       <ShowcaseSection title="Informasi Admin" className="!p-6.5 space-y-5.5">
-//         {loading ? (
-//           <p>Loading...</p>
-//         ) : error ? (
-//           <p className="text-red-500">{error}</p>
-//         ) : user ? (
-//           <div className="space-y-4">
-//             <div>
-//               <span className="font-semibold">Nama:</span>
-//               <p>{user.name}</p>
-//             </div>
-//             <div>
-//               <span className="font-semibold">Email:</span>
-//               <p>{user.email}</p>
-//             </div>
-//             <div>
-//               <span className="font-semibold">Role:</span>
-//               <p>{user.role_name ?? user.role_id}</p>
-//             </div>
-//           </div>
-//         ) : (
-//           <p>Data tidak ditemukan</p>
-//         )}
-//       </ShowcaseSection>
-//     </>
-//   );
-// }
-
 // app/admin/admin/show/[id]/page.tsx
 "use client";
 
@@ -78,7 +5,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import InputGroup from "@/components/FormElements/InputGroup";
-import { Select } from "@/components/FormElements/select";
 import { ShowcaseSection } from "@/components/Layouts/showcase-section";
 
 type Role = {
@@ -147,7 +73,6 @@ export default function ShowAdminPage() {
                     placeholder=""
                     type="text"
                     value={form.name}
-                    // onChange={() => {}}
                     readOnly 
                   />
                   <InputGroup
@@ -156,7 +81,6 @@ export default function ShowAdminPage() {
                     placeholder=""
                     type="email"
                     value={form.email}
-                    // onChange={() => {}}
                     readOnly
                   />
                   <InputGroup
@@ -167,7 +91,6 @@ export default function ShowAdminPage() {
                     value={
                       roles.find((role) => String(role.role_id) === form.role_id)?.role_name || "-"
                     }
-                    // onChange={() => {}}
                     readOnly
                   />
                 </>

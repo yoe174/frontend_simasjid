@@ -1,20 +1,8 @@
-import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
-import CalendarBox from "@/components/CalenderBox";
-import { Metadata } from "next";
+// src\app\admin\informasi\page.tsx
+"use client";
 
-export const metadata: Metadata = {
-  title: "Calender Page",
-  // other metadata
+import InformasiTable from "@/components/admin/informasi/InformasiTable";
+
+export default function InformasiPage() {
+  return <InformasiTable />;
 };
-
-const CalendarPage = () => {
-  return (
-    <>
-      <Breadcrumb pageName="Calendar" />
-
-      <CalendarBox />
-    </>
-  );
-};
-
-export default CalendarPage;

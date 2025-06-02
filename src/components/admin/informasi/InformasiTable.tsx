@@ -1,36 +1,41 @@
-// src\components\admin\admin\AdminTable.tsx
+// src\components\admin\informasi\InformasiTable.tsx
 "use client";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { withAdminPrefix } from "@/utils/prefixAdminUrl";
 import { PreviewIcon } from "@/components/Tables/icons";
 import { PencilSquareIcon, TrashIcon } from "@/assets/icons";
 
-type User = {
-  user_id: number;
-  role_id: number;
-  name: string;
-  email: string;
-  password: string;
-  role?: {
-    role_name: string;
-  };
+type Informasi = {
+  informasi_id: number;
+  judul: string;
+  isi: string;
+  updated_at: string;
+  status: "aktif" | "arsip";
+  image?: string;
+  keterangan?: string;
 };
 
-export default function AdminTable() {
-  const [users, setUsers] = useState<User[]>([]);
+export default function InformasiTable() {
+  const [informasiList, setInformasiList] = useState<Informasi[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Ambil data user
-  const fetchUsers = async () => {
+  const fetchInformasi = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user`);
-      if (!res.ok) throw new Error("Gagal mengambil data user");
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/informasi`);
+      if (!res.ok) throw new Error("Gagal mengambil data informasi");
       const json = await res.json();
-      setUsers(json.data);
+      setInformasiList(json);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     } finally {
@@ -39,25 +44,22 @@ export default function AdminTable() {
   };
 
   useEffect(() => {
-    fetchUsers();
+    fetchInformasi();
   }, []);
 
-  // Fungsi hapus user
-  const handleDelete = async (user_id: number) => {
-    const konfirmasi = confirm("Apakah Anda yakin ingin menghapus user ini?");
+  const handleDelete = async (id: number) => {
+    const konfirmasi = confirm("Apakah Anda yakin ingin menghapus informasi ini?");
     if (!konfirmasi) return;
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/${user_id}`, {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/informasi/${id}`, {
         method: "DELETE",
       });
-
-      if (!res.ok) throw new Error("Gagal menghapus user");
+      if (!res.ok) throw new Error("Gagal menghapus informasi");
       const json = await res.json();
-      alert(json.message || "User berhasil dihapus");
+      alert(json.message || "Informasi berhasil dihapus");
 
-      // Hapus user dari state
-      setUsers((prev) => prev.filter((u) => u.user_id !== user_id));
+      setInformasiList((prev) => prev.filter((info) => info.informasi_id !== id));
     } catch (err) {
       alert("Terjadi kesalahan saat menghapus");
       console.error(err);
@@ -70,12 +72,12 @@ export default function AdminTable() {
   return (
     <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card p-6">
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-dark dark:text-white">Daftar Admin</h1>
+        <h1 className="text-2xl font-bold text-dark dark:text-white">Daftar Informasi</h1>
         <Link
-          href={withAdminPrefix(`/admin/create`)}
+          href={withAdminPrefix(`/informasi/create`)}
           className="rounded-md bg-primary px-4 py-2 text-white hover:bg-primary/90"
         >
-          Tambah Admin
+          Tambah Informasi
         </Link>
       </div>
 
@@ -83,45 +85,55 @@ export default function AdminTable() {
         <TableHeader>
           <TableRow className="border-t text-base [&>th]:h-auto [&>th]:py-3 sm:[&>th]:py-4.5">
             <TableHead className="min-w-[40px] pl-5 sm:pl-6 xl:pl-7.5">#</TableHead>
-            <TableHead className="min-w-[200px]">Username</TableHead>
-            <TableHead>Email</TableHead>
-            {/* <TableHead>Password</TableHead> */}
-            <TableHead>Role</TableHead>
+            <TableHead className="min-w-[200px]">Judul</TableHead>
+            <TableHead>Terakhir diUpdate</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Gambar</TableHead>
             <TableHead className="pr-5 text-right sm:pr-6 xl:pr-7.5">Action</TableHead>
           </TableRow>
         </TableHeader>
 
         <TableBody>
-          {users.map((user, i) => (
+          {informasiList.map((info, i) => (
             <TableRow
               className="text-base font-medium text-dark dark:text-white"
-              key={user.user_id}
+              key={info.informasi_id}
             >
               <TableCell className="pl-5 sm:pl-6 xl:pl-7.5">{i + 1}</TableCell>
-              <TableCell>{user.name}</TableCell>
-              <TableCell>{user.email}</TableCell>
-              {/* <TableCell>{user.password}</TableCell> */}
-              <TableCell>{user.role?.role_name || "Tidak diketahui"}</TableCell>
+              <TableCell>{info.judul}</TableCell>
+              <TableCell>{info.updated_at}</TableCell>
+              <TableCell>{info.status}</TableCell>
+              <TableCell>
+                {info.image ? (
+                  <img
+                    src={`${process.env.NEXT_PUBLIC_API_URL}/storage/${info.image}`}
+                    alt="Gambar"
+                    className="w-20 h-12 object-cover rounded"
+                  />
+                ) : (
+                  "Tidak ada"
+                )}
+              </TableCell>
               <TableCell className="pr-5 text-right sm:pr-6 xl:pr-7.5">
                 <div className="flex items-center justify-end gap-x-3.5">
                   <Link
-                    href={withAdminPrefix(`/admin/show/${user.user_id}`)}
+                    href={withAdminPrefix(`/informasi/show/${info.informasi_id}`)}
                     className="hover:text-primary"
-                    aria-label="Lihat User"
+                    aria-label="Lihat Informasi"
                   >
                     <PreviewIcon />
                   </Link>
                   <Link
-                    href={withAdminPrefix(`/admin/edit/${user.user_id}`)}
+                    href={withAdminPrefix(`/informasi/edit/${info.informasi_id}`)}
                     className="hover:text-primary"
-                    aria-label="Edit User"
+                    aria-label="Edit Informasi"
                   >
                     <PencilSquareIcon />
                   </Link>
                   <button
-                    onClick={() => handleDelete(user.user_id)}
+                    onClick={() => handleDelete(info.informasi_id)}
                     className="hover:text-primary"
-                    aria-label="Hapus User"
+                    aria-label="Hapus Informasi"
                   >
                     <TrashIcon />
                   </button>

@@ -10,6 +10,7 @@ interface PropsType {
   className?: string;
   icon?: React.ReactNode;
   defaultValue?: string;
+  name?: string
 }
 
 export function TextAreaGroup({
