@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { motion } from "framer-motion";
 
 const FeatureSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -51,10 +52,13 @@ const FeatureSection = () => {
             <h3 className="text-lg font-bold mt-4 text-yellow-500 group-hover:text-yellow-400 transition-colors duration-300">
               TEMPAT IBADAH
             </h3>
-            <p className="mt-2 text-sm leading-relaxed opacity-90 group-hover:opacity-100 transition-opacity duration-300">
-              Tempat Ibadah Layanan shalat berjamaah wajib dibuka selama waktu-waktu shalat. 
-              Adapun pelaksanaan shalat sunat berjamaah semisal shalat tarawih, shalat Id, shalat gerhana dan juga shalat jenazah.
-            </p>
+            <motion.p 
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.5, duration: 2 }}
+            className="mt-2 text-sm leading-relaxed opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+              Menyediakan fasilitas ibadah yang nyaman dan representatif sebagai pusat kegiatan keagamaan komunitas, di mana pelaksanaan salat berjamaah lima waktu menjadi prioritas utama, serta memfasilitasi pelaksanaan ibadah sunnah seperti salat tarawih, salat Idul Fitri dan Idul Adha, salat gerhana, dan penyelenggaraan salat jenazah bagi anggota masyarakat yang berduka.
+            </motion.p>
           </div>
         </div>
 
@@ -74,9 +78,13 @@ const FeatureSection = () => {
             <h3 className="text-lg font-bold mt-4 text-yellow-500 group-hover:text-yellow-400 transition-colors duration-300">
               PENDIDIKAN
             </h3>
-            <p className="mt-2 text-sm leading-relaxed opacity-90 group-hover:opacity-100 transition-opacity duration-300">
-              Kajian dan pendidikan agama tersedia untuk anak-anak dan dewasa, termasuk kelas mengaji dan ceramah rutin.
-            </p>
+            <motion.p 
+          initial={{ y: 100, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.5, duration: 2 }}
+            className="mt-2 text-sm leading-relaxed opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+              Menyelenggarakan program pendidikan dan pengajian yang komprehensif dan berkelanjutan bagi berbagai kelompok usia, mulai dari anak-anak hingga dewasa, dengan menyediakan kelas-kelas mengaji yang terstruktur serta mengadakan ceramah-ceramah keagamaan rutin untuk meningkatkan pemahaman dan pengamalan nilai-nilai agama.
+            </motion.p>
           </div>
         </div>
 
@@ -96,9 +104,13 @@ const FeatureSection = () => {
             <h3 className="text-lg font-bold mt-4 text-yellow-500 group-hover:text-yellow-400 transition-colors duration-300">
               KEGIATAN SOSIAL
             </h3>
-            <p className="mt-2 text-sm leading-relaxed opacity-90 group-hover:opacity-100 transition-opacity duration-300">
-              Kegiatan sosial dan bantuan kemanusiaan seperti zakat, infak, sedekah, dan bakti sosial untuk masyarakat sekitar.
-            </p>
+            <motion.p 
+            initial={{ x: 100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ delay: 0.5, duration: 2 }}
+            className="mt-2 text-sm leading-relaxed opacity-90 group-hover:opacity-100 transition-opacity duration-300">
+              Mengorganisir berbagai kegiatan sosial dan kemanusiaan yang bertujuan untuk meningkatkan kesejahteraan masyarakat sekitar, melalui penyaluran zakat, infak, dan sedekah yang terkelola dengan baik, serta mengadakan bakti sosial secara berkala sebagai wujud kepedulian dan tanggung jawab sosial terhadap sesama.
+            </motion.p>
           </div>
         </div>
       </div>

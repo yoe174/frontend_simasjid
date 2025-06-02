@@ -6,7 +6,7 @@ import { MessageCircle, Check } from 'lucide-react';
 const WhatsAppCTASection = () => {
   // Konfigurasi WhatsApp
   const whatsappConfig = {
-    phoneNumber: "6288292105178",
+    phoneNumber: "6282268608092",
     message: `Assalamu'alaikum, saya tertarik untuk melakukan reservasi Masjid.
 
 Mohon informasi lebih lanjut terkait:

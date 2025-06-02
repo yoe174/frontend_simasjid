@@ -1,5 +1,6 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+import Link from "next/link";
 
 const HeroSection = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -110,9 +111,6 @@ const HeroSection = () => {
             <div className={`pt-4 transform transition-all duration-1000 ease-out delay-1400 ${
               isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
             }`}>
-              <button className="bg-transparent border-2 border-yellow-400 text-yellow-400 px-8 py-3 rounded-none font-medium tracking-wide hover:bg-yellow-400 hover:text-slate-900 transition-all duration-300 transform hover:scale-105 hover:shadow-lg hover:shadow-yellow-400/25 active:scale-95">
-                LOKSAI KAMI
-              </button>
             </div>
           </div>
         </div>

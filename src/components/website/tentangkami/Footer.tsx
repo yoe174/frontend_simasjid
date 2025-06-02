@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
             <div>
               <h3 className="font-bold text-gray-800">Email</h3>
               <p className="text-sm text-gray-600 mt-2">
-                aljabbar@jabarprov.go.id
+                masjidalmuhajirin@gmail.com
               </p>
             </div>
           </div>
@@ -111,7 +111,7 @@ const Footer: React.FC = () => {
 
         {/* Copyright Section */}
         <div className="border-t border-gray-200 pt-6 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-600 mb-4 md:mb-0">Dewan Kemakmuran Masjid Raya Al-Imam Malang</p>
+          <p className="text-gray-600 mb-4 md:mb-0">Dewan Kemakmuran Masjid Al-Muhajirin Malang</p>
           <p className="text-gray-600">Copyright © 2025</p>
         </div>
       </div>

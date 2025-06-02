@@ -29,8 +29,8 @@ const ProgramsSection: React.FC = () => {
   return (
     <div className="py-16 bg-gray-100">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold text-black text-center mb-12">
-          Jadikan Setiap Langkah Berkah Bersama Masjid Al-Imam!
+        <h2 className="text-3xl font-bold text-black text-center font-serif mb-12">
+          Jadikan Setiap Langkah Berkah Bersama Masjid Al-Muhajirin!
         </h2>
         
         <div className="flex flex-col md:flex-row gap-8 justify-center">

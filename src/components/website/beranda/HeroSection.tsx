@@ -34,7 +34,7 @@ const HeroSection = () => {
         >
           Selamat Datang di Masjid Al Muhajjirin Vila Mutiara Cikarang. Masjid yang pertama
           dibangun tahun 2003 dan mengalami renovasi total pada tahun 2018 yang
-          berlokasi di Jl. Anggrek Vila Mutiara Cikarang, Cikarang Selatan, Bekasi.
+          berlokasi di Jl. Perum Joyo Grand, RW.08, Merjosari, Kec. Lowokwaru, Kota Malang, Jawa Timur 65144.
         </motion.p>
       </div>
     </section>

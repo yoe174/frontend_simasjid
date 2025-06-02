@@ -140,7 +140,7 @@ const PrayerScheduleSection: React.FC = () => {
       <div className="max-w-2xl mx-auto"> {/* Lebar tabel ditingkatkan */}
         {/* Header */}
         <div className="text-center mb-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-3 tracking-wide">
+          <h1 className="text-3xl font-bold text-gray-800 mb-3 tracking-wide font-serif">
             JADWAL SHOLAT
           </h1>
         </div>

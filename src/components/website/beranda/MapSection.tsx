@@ -3,7 +3,8 @@ import Image from 'next/image';
 
 const MapSection: React.FC = () => {
   return (
-    <div className="w-full bg-gradient-to-b from-slate-800 via-slate-900 to-slate-800 text-white p-6 rounded-lg">
+    <section id="lokasimasjid" className="bg-gray-100">
+    <div className="w-full bg-gradient-to-b from-slate-800 via-slate-900 to-slate-800 text-white p-6">
       <div className="flex flex-col items-center mb-4">
         <h1 className="text-2xl font-bold text-yellow-500">Lokasi Masjid Al-Muhajirin</h1>
         <p className="text-sm text-gray-300"></p>
@@ -11,7 +12,7 @@ const MapSection: React.FC = () => {
 
       <div className="flex flex-col md:flex-row gap-4 justify-between">
         {/* Contact Information Card */}
-        <div className="bg-gray-200 rounded-lg p-6 text-black w-full md:w-5/12">
+        <div className="bg-gray-200 rounded-lg p-6 text-black w-full md:w-3/12">
           <h2 className="text-lg font-bold mb-1">Kontak</h2>
           <p className="text-sm text-gray-600 mb-6">Deskripsi Kontak</p>
           
@@ -24,7 +25,7 @@ const MapSection: React.FC = () => {
               </div>
               <div>
                 <h3 className="font-bold">Lokasi</h3>
-                <p className="text-sm">Jalan Salam</p>
+                <p className="text-sm">Jl. Perum Joyo Grand, RW.08, Merjosari, Kec. Lowokwaru, Kota Malang, Jawa Timur 65144</p>
               </div>
             </div>
 
@@ -49,14 +50,14 @@ const MapSection: React.FC = () => {
               </div>
               <div>
                 <h3 className="font-bold">Email</h3>
-                <p className="text-sm">masjidkami@gmail.com</p>
+                <p className="text-sm">masjidalmuhajirin@gmail.com</p>
               </div>
             </div>
           </div>
         </div>
 
         {/* Map Card */}
-        <div className="w-full md:w-7/12 h-64 md:h-auto rounded-lg overflow-hidden relative">
+        <div className="w-full md:w-9/12 h-64 md:h-auto rounded-lg overflow-hidden relative">
          <iframe
     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.5325724742365!2d112.596227!3d-7.943785999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78826aa62c5cf1%3A0x6182180b9250f37e!2sMosque%20Al-Muhajirin!5e0!3m2!1sen!2sid!4v1747799952288!5m2!1sen!2sid"
     width="100%"
@@ -68,7 +69,7 @@ const MapSection: React.FC = () => {
     className="rounded-lg absolute top-0 left-0 w-full h-full"
   ></iframe>
           {/* Map Marker */}
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <div className="flex flex-col items-center">
               <div className="w-6 h-6 bg-red-600 rounded-full flex items-center justify-center">
                 <div className="w-3 h-3 bg-white rounded-full"></div>
@@ -79,6 +80,7 @@ const MapSection: React.FC = () => {
         </div>
       </div>
     </div>
+    </section>
   );
 };
 
