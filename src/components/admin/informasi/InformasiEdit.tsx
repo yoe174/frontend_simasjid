@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import InputGroup from "@/components/FormElements/InputGroup";
-// import TextArea from "@/components/FormElements/TextArea";
+import { TextAreaGroup } from "@/components/FormElements/InputGroup/text-area";
 import { Select } from "@/components/FormElements/select";
 import { ShowcaseSection } from "@/components/Layouts/showcase-section";
 
@@ -23,9 +23,9 @@ export default function EditInformasiPage() {
 
   const [gambar, setGambar] = useState<File | null>(null);
   const [gambarPreview, setGambarPreview] = useState<string | null>(null);
-
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [hapusGambar, setHapusGambar] = useState(false);
 
   // Ambil data berdasarkan ID
   useEffect(() => {
@@ -37,11 +37,15 @@ export default function EditInformasiPage() {
         setForm({
           judul: data.judul,
           isi: data.isi,
-          status: data.status,
+          status: data.status.toLowerCase(), // Pastikan cocok
           keterangan: data.keterangan ?? "",
         });
 
-        setGambarPreview(`${process.env.NEXT_PUBLIC_API_URL}/storage/informasi/${data.image}`);
+        console.log("STATUS DARI SERVER:", data.status);
+
+        if (data.image) {
+          setGambarPreview(`${process.env.NEXT_PUBLIC_API_URL}/storage/${data.image}`);
+        }
       } catch (err) {
         console.error("Gagal ambil data informasi:", err);
       }
@@ -75,20 +79,19 @@ export default function EditInformasiPage() {
       formData.append("isi", form.isi);
       formData.append("status", form.status);
       formData.append("keterangan", form.keterangan);
+      if (hapusGambar) {
+        formData.append("hapus_gambar", "1"); // server cek untuk hapus
+      }
       if (gambar) formData.append("image", gambar);
+      formData.append("_method", "PUT"); // Laravel expects PUT via POST
 
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/informasi/${id}`, {
-        method: "POST", // Laravel expects POST with _method=PUT for multipart
-        body: (() => {
-          formData.append("_method", "PUT");
-          return formData;
-        })(),
+        method: "POST",
+        body: formData,
       });
 
       const json = await res.json();
-      if (!res.ok) {
-        throw new Error(json.message || "Gagal mengupdate informasi");
-      }
+      if (!res.ok) throw new Error(json.message || "Gagal mengupdate informasi");
 
       router.push("/admin/informasi");
     } catch (err) {
@@ -100,77 +103,91 @@ export default function EditInformasiPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Edit Informasi" />
+      <Breadcrumb pageName="Informasi" mapName="Edit Informasi" />
+
       <form onSubmit={handleSubmit} className="space-y-9">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-9">
-          <div className="flex flex-col gap-9">
-            <ShowcaseSection title="Edit Informasi" className="space-y-5.5 !p-6.5">
+        <div className="flex flex-col gap-9">
+          <ShowcaseSection title="Form Informasi" className="!p-6.5 space-y-5.5">
+            {/* Row 1: Judul & Status */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <InputGroup
                 label="Judul"
                 name="judul"
-                placeholder="Masukkan judul"
+                placeholder="Judul informasi"
                 type="text"
                 value={form.judul}
                 onChange={handleChange}
                 required
               />
-              <div>
-                <label className="mb-2 block text-sm font-medium text-black dark:text-white">
-                  Isi
-                </label>
-                <textarea
-                  name="isi"
-                  placeholder="Isi informasi"
-                  value={form.isi}
-                  onChange={handleChange}
-                  className="w-full rounded border border-stroke bg-white px-4 py-2.5 text-black dark:border-form-strokedark dark:bg-form-input dark:text-white"
-                  rows={6}
-                  required
-                ></textarea>
-              </div>
-              {/* <TextArea
+              <Select
+                label="Status"
+                placeholder="Pilih Status"
+                value={form.status}
+                onChange={(e) => setForm({ ...form, status: e.target.value })}
+                items={[
+                  { value: "aktif", label: "aktif" },
+                  { value: "arsip", label: "arsip" },
+                ]}
+              />
+            </div>
+
+            {/* Row 2: Isi & Keterangan */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <TextAreaGroup  
                 label="Isi"
                 name="isi"
-                placeholder="Masukkan isi informasi"
+                placeholder="Isi informasi"
                 value={form.isi}
                 onChange={handleChange}
                 required
-              /> */}
-              <Select
-                label="Status"
-                placeholder=""
-                value={form.status}
-                onChange={(e) =>
-                  setForm({ ...form, status: e.target.value })
-                }
-                items={[
-                  { value: "aktif", label: "Aktif" },
-                  { value: "nonaktif", label: "Nonaktif" },
-                ]}
               />
-              <InputGroup
+              <TextAreaGroup
                 label="Keterangan"
                 name="keterangan"
                 placeholder="Keterangan tambahan"
-                type="text"
                 value={form.keterangan}
                 onChange={handleChange}
               />
-              <div className="space-y-2">
-                <label className="block font-medium text-dark dark:text-white">
-                  Gambar
+            </div>
+
+            {/* Row 3: Upload Gambar */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label className="mb-2 block text-sm font-medium text-black dark:text-white">
+                  Upload Gambar
                 </label>
-                {gambarPreview && (
-                  <img
-                    src={gambarPreview}
-                    alt="Preview"
-                    className="w-32 h-auto rounded shadow"
-                  />
+                <input
+                  type="file"
+                  name="image"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-white dark:border-gray-600 dark:bg-gray-700"
+                />
+                {gambarPreview && !hapusGambar && (
+                  <div className="mt-4 space-y-2">
+                    <img
+                      src={gambarPreview}
+                      alt="Preview"
+                      className="w-40 h-auto rounded shadow"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setHapusGambar(true);
+                        setGambar(null);
+                        setGambarPreview(null);
+                      }}
+                      className="text-sm text-red-500 hover:underline"
+                    >
+                      Hapus Gambar
+                    </button>
+                  </div>
                 )}
-                <input type="file" accept="image/*" onChange={handleFileChange} />
+
               </div>
-            </ShowcaseSection>
-          </div>
+              <div></div>
+            </div>
+          </ShowcaseSection>
         </div>
 
         {error && <div className="text-red-500">{error}</div>}
@@ -180,7 +197,7 @@ export default function EditInformasiPage() {
           disabled={loading}
           className="rounded bg-primary px-6 py-3 text-white transition hover:bg-opacity-90"
         >
-          {loading ? "Menyimpan..." : "Simpan Perubahan"}
+          {loading ? "Menyimpan..." : "Simpan"}
         </button>
       </form>
     </>

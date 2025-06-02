@@ -13,18 +13,21 @@ type PropsType = {
   value?: String;
   onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 } & (
-  | { placeholder?: string; defaultValue: string }
-  | { placeholder: string; defaultValue?: string }
+  // | { placeholder?: string; defaultValue: string }
+  | { placeholder?: string; value: string }
+  // | { placeholder: string; defaultValue?: string }
+  | { placeholder: string; value?: string }
 );
 
 export function Select({
   items,
   label,
-  defaultValue,
+  // defaultValue,
   placeholder,
   prefixIcon,
   className,
-  onChange
+  onChange,
+  value
 }: PropsType) {
   const id = useId();
 
@@ -48,7 +51,7 @@ export function Select({
 
         <select
           id={id}
-          defaultValue={defaultValue || ""}
+          value={value ?? ""}
           onChange={(e) => {
             setIsOptionSelected(true);
             onChange?.(e);

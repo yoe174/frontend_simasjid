@@ -56,7 +56,7 @@ export default function ShowAdminPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Detail Admin" />
+      <Breadcrumb pageName="Admin" mapName="Detail Admin" />
       <div className="space-y-9">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-9">
           <div className="flex flex-col gap-9">

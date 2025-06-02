@@ -1,3 +1,4 @@
+// src\components\admin\informasi\InformasiCreate.tsx
 "use client";
 
 import { useState } from "react";
@@ -6,6 +7,7 @@ import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import InputGroup from "@/components/FormElements/InputGroup";
 import { Select } from "@/components/FormElements/select";
 import { ShowcaseSection } from "@/components/Layouts/showcase-section";
+import { TextAreaGroup } from "@/components/FormElements/InputGroup/text-area"; // Pastikan path-nya benar
 
 export default function CreateInformasiPage() {
   const router = useRouter();
@@ -13,11 +15,12 @@ export default function CreateInformasiPage() {
   const [form, setForm] = useState({
     judul: "",
     isi: "",
-    status: "aktif",
+    status: "",
     keterangan: "",
   });
 
   const [image, setImage] = useState<File | null>(null);
+  const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -29,7 +32,9 @@ export default function CreateInformasiPage() {
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
-      setImage(e.target.files[0]);
+      const file = e.target.files[0];
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
     }
   };
 
@@ -38,9 +43,8 @@ export default function CreateInformasiPage() {
     setLoading(true);
     setError("");
 
-    // Validasi
     if (!form.judul || !form.isi || !form.status) {
-      setError("Judul, Isi, dan Status wajib diisi.");
+      setError("Kolom bertanda * wajib diisi");
       setLoading(false);
       return;
     }
@@ -74,11 +78,12 @@ export default function CreateInformasiPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Create Informasi" />
+      <Breadcrumb pageName="Informasi" mapName="Create Informasi" />
       <form onSubmit={handleSubmit} className="space-y-9">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-9">
-          <div className="flex flex-col gap-9">
-            <ShowcaseSection title="Form Informasi" className="space-y-5.5 !p-6.5">
+        <div className="flex flex-col gap-9">
+          <ShowcaseSection title="Form Informasi" className="!p-6.5 space-y-5.5">
+            {/* Row 1: Judul & Status */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <InputGroup
                 label="Judul"
                 name="judul"
@@ -88,20 +93,6 @@ export default function CreateInformasiPage() {
                 onChange={handleChange}
                 required
               />
-              <div>
-                <label className="mb-2 block text-sm font-medium text-black dark:text-white">
-                  Isi
-                </label>
-                <textarea
-                  name="isi"
-                  placeholder="Isi informasi"
-                  value={form.isi}
-                  onChange={handleChange}
-                  className="w-full rounded border border-stroke bg-white px-4 py-2.5 text-black dark:border-form-strokedark dark:bg-form-input dark:text-white"
-                  rows={6}
-                  required
-                ></textarea>
-              </div>
 
               <Select
                 label="Status"
@@ -109,49 +100,68 @@ export default function CreateInformasiPage() {
                 value={form.status}
                 onChange={(e) => setForm({ ...form, status: e.target.value })}
                 items={[
-                  { value: "aktif", label: "Aktif" },
-                  { value: "arsip", label: "Arsip" },
+                  { value: "aktif", label: "aktif" },
+                  { value: "arsip", label: "arsip" },
                 ]}
               />
+            </div>
 
-              {/* <InputGroup
-                label="Keterangan (opsional)"
+            {/* Row 2: Isi & Keterangan */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <TextAreaGroup
+                label="Isi"
+                name="isi"
+                placeholder="Isi informasi"
+                value={form.isi}
+                onChange={handleChange}
+                required
+              />
+
+              <TextAreaGroup
+                label="Keterangan"
                 name="keterangan"
                 placeholder="Keterangan tambahan"
-                type="text"
                 value={form.keterangan}
                 onChange={handleChange}
-              /> */}
+              />
+            </div>
 
+            {/* Gambar Upload Full Width */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
-                <label className="mb-2 block text-sm font-medium text-black dark:text-white">
-                  Keterangan
-                </label>
-                <textarea
-                  name="keterangan"
-                  placeholder="keterangan"
-                  value={form.keterangan}
-                  onChange={handleChange}
-                  className="w-full rounded border border-stroke bg-white px-4 py-2.5 text-black dark:border-form-strokedark dark:bg-form-input dark:text-white"
-                  rows={6}
-                  required
-                ></textarea>
+              <label className="mb-2 block text-sm font-medium text-black dark:text-white">
+                Upload Gambar
+              </label>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-white dark:border-gray-600 dark:bg-gray-700"
+              />
+              {preview && (
+                <div className="mt-4 space-y-2">
+                  <img
+                    src={preview}
+                    alt="Preview"
+                    className="w-40 h-auto rounded shadow"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setPreview(null);
+                      setImage(null);
+                    }}
+                    className="text-sm text-red-500 hover:underline"
+                  >
+                    Hapus Gambar
+                  </button>
+                </div>
+              )}
               </div>
-
-              <div>
-                <label className="mb-2 block text-sm font-medium text-black dark:text-white">
-                  Upload Gambar
-                </label>
-                <input
-                  type="file"
-                  name="image"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-white dark:border-gray-600 dark:bg-gray-700"
-                />
-              </div>
-            </ShowcaseSection>
-          </div>
+              <div></div>
+            </div>
+          </ShowcaseSection>
         </div>
 
         {error && <div className="text-red-500">{error}</div>}
