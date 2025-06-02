@@ -1,8 +1,8 @@
-// src\app\admin\admin\edit\[id]\page.tsx
+// src\app\admin\kegiatan\edit\[id]\page.tsx
 "use client";
 
-import AdminEditPage from "@/components/admin/admin/AdminEdit";
+import KegiatanEditPage from "@/components/admin/kegiatan/KegiatanEdit";
 
-export default function AdminEdit() {
-  return <AdminEditPage />;
+export default function KegiatanEdit() {
+  return <KegiatanEditPage />;
 };

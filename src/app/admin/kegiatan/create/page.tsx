@@ -1,8 +1,8 @@
-// src\app\admin\admin\page.tsx
+// app\admin\kegiatan\create\page.tsx
 "use client";
 
-import CreateAdminPage from "@/components/admin/admin/AdminCreate";
+import CreateKegiatanPage from "@/components/admin/kegiatan/KegiatanCreate";
 
-export default function AdminCreatePage() {
-  return <CreateAdminPage />;
+export default function KegiatanCreatePage() {
+  return <CreateKegiatanPage />;
 };

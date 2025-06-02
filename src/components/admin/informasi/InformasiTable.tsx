@@ -15,6 +15,7 @@
   import { PreviewIcon } from "@/components/Tables/icons";
   import { PencilSquareIcon, TrashIcon } from "@/assets/icons";
   import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+  import SkeletonLoader from "@/components/FormElements/Skeleton/SkeletonLoader"
 
   type Informasi = {
     informasi_id: number;
@@ -78,7 +79,7 @@
     };
 
 
-    if (loading) return <div>Memuat data...</div>;
+    if (loading) return <SkeletonLoader type="form" />;
     if (error) return <div>Error: {error}</div>;
 
     return (

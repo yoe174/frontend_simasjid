@@ -1,8 +1,8 @@
 // src\app\admin\admin\show\[id]\page.tsx
 "use client";
 
-import ShowAdminPage from "@/components/admin/admin/AdminShow";
+import ShowKegiatanPage from "@/components/admin/kegiatan/KegiatanShow";
 
-export default function AdminShow() {
-  return <ShowAdminPage />;
+export default function KegiatanShow() {
+  return <ShowKegiatanPage />;
 };

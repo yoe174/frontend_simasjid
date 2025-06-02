@@ -41,8 +41,6 @@ export default function EditInformasiPage() {
           keterangan: data.keterangan ?? "",
         });
 
-        console.log("STATUS DARI SERVER:", data.status);
-
         if (data.image) {
           setGambarPreview(`${process.env.NEXT_PUBLIC_API_URL}/storage/${data.image}`);
         }
