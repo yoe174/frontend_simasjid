@@ -15,10 +15,10 @@ export const metadata: Metadata = {
 const TablesPage = () => {
   return (
     <>
-      <Breadcrumb pageName="Tables" />
+      <Breadcrumb pageName="Tables" mapName=""/>
       <TopProducts />
 
-      {/* <div className="space-y-10">
+      <div className="space-y-10">
         <Suspense fallback={<TopChannelsSkeleton />}>
           <TopChannels />
         </Suspense>
@@ -28,7 +28,7 @@ const TablesPage = () => {
         </Suspense>
 
         <InvoiceTable />
-      </div> */}
+      </div>
     </>
   );
 };

@@ -1,8 +1,8 @@
 // src\app\admin\admin\page.tsx
 "use client";
 
-import AdminTable from "@/components/admin/admin/AdminTable";
+import KegiatanTable from "@/components/admin/kegiatan/KegiatanTable";
 
 export default function AdminPage() {
-  return <AdminTable />;
+  return <KegiatanTable />;
 };

@@ -7,6 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { withAdminPrefix } from "@/utils/prefixAdminUrl";
 import { PreviewIcon } from "@/components/Tables/icons";
 import { PencilSquareIcon, TrashIcon } from "@/assets/icons";
+import SkeletonLoader from "@/components/FormElements/Skeleton/SkeletonLoader"
 
 type User = {
   user_id: number;
@@ -64,7 +65,7 @@ export default function AdminTable() {
     }
   };
 
-  if (loading) return <div>Memuat data...</div>;
+  if (loading) return <SkeletonLoader type="form" />;
   if (error) return <div>Error: {error}</div>;
 
   return (
