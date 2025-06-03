@@ -1,8 +1,8 @@
 // src\app\admin\admin\page.tsx
 "use client";
 
-import CreateAdminPage from "@/components/admin/admin/AdminCreate";
+import CreateReservasi from "@/components/admin/reservasi/ReservasiCreate";
 
-export default function AdminCreatePage() {
-  return <CreateAdminPage />;
+export default function ReservasiCreatePage() {
+  return <CreateReservasi />;
 };

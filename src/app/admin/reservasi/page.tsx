@@ -1,8 +1,8 @@
 // src\app\admin\admin\page.tsx
 "use client";
 
-import AdminTable from "@/components/admin/admin/AdminTable";
+import ReservasiTable from "@/components/admin/reservasi/ReservasiTable";
 
 export default function AdminPage() {
-  return <AdminTable />;
+  return <ReservasiTable />;
 };

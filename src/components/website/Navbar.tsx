@@ -14,7 +14,7 @@ const Navbar = () => {
     { name: "Beranda", href: "/website/beranda" },
     { name: "Tentang Kami", href: "/website/tentangkami" },
     { name: "Reservasi", href: "/website/reservasi" },
-    { name: "Login Admin", href: "/admin/login" },
+    { name: "Login Admin", href: "/login/login" },
   ];
 
   useEffect(() => {
