@@ -42,7 +42,7 @@ const rawNavData = [
       },
       {
         title: "Tempat Reservasi",
-        url: "/tempatReservasi",
+        url: "/tempat_reservasi",
         icon: NotebookIcon,
         items: [],
       },

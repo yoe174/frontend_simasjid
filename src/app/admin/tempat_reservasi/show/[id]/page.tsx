@@ -1,8 +1,8 @@
 // src\app\admin\admin\show\[id]\page.tsx
 "use client";
 
-import ShowAdminPage from "@/components/admin/admin/AdminShow";
+import ShowTempatReservasi from "@/components/admin/tempatReservasi/TempatReservasiShow";
 
-export default function AdminShow() {
-  return <ShowAdminPage />;
+export default function ShowTempatReservasiPage() {
+  return <ShowTempatReservasi />;
 };
