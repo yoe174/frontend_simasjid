@@ -1,8 +1,8 @@
-// src\app\admin\admin\show\[id]\page.tsx
+// src\app\admin\transaksi\show\[id]\page.tsx
 "use client";
 
-import ShowAdminPage from "@/components/admin/admin/AdminShow";
+import ShowTransaksiPage from "@/components/admin/transaksi/TransaksiShow";
 
-export default function AdminShow() {
-  return <ShowAdminPage />;
+export default function TransaksiShow() {
+  return <ShowTransaksiPage />;
 };

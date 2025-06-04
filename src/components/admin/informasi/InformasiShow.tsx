@@ -89,7 +89,7 @@ export default function ShowInformasiPage() {
                 readOnly
               />
               <InputGroup
-                label="Terakhir Update"
+                label="Diperbarui"
                 name="updated_at"
                 placeholder=""
                 type="text"

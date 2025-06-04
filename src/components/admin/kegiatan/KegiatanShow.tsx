@@ -96,7 +96,7 @@ export default function ShowKegiatanPage() {
                   readOnly
                 />
                 <InputGroup
-                  label="Terakhir Update"
+                  label="Diperbarui"
                   name="updated_at"
                   placeholder=""
                   type="text"
@@ -115,25 +115,26 @@ export default function ShowKegiatanPage() {
                 value={form.nama_kegiatan}
                 readOnly
               />
-              <InputGroup
-                label="Status"
-                name="status"
-                placeholder=""
-                type="text"
-                value={form.status}
-                readOnly
-              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <InputGroup
+                  label="Tanggal Kegiatan"
+                  name="tanggal"
+                  type="text"
+                  placeholder=""
+                  value={formatTanggal(form.tanggal)}
+                  readOnly
+                />
+                <InputGroup
+                  label="Status"
+                  name="status"
+                  placeholder=""
+                  type="text"
+                  value={form.status}
+                  readOnly
+                />
+              </div>
             </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <InputGroup
-                label="Tanggal Kegiatan"
-                name="tanggal"
-                type="text"
-                placeholder=""
-                value={formatTanggal(form.tanggal)}
-                readOnly
-              />
               <InputGroup
                 label="Lokasi"
                 name="lokasi"
@@ -142,27 +143,25 @@ export default function ShowKegiatanPage() {
                 value={form.lokasi}
                 readOnly
               />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <InputGroup
+                  label="Waktu Mulai"
+                  name="waktu_mulai"
+                  type="text"
+                  placeholder=""
+                  value={form.waktu_mulai}
+                  readOnly
+                />
+                <InputGroup
+                  label="Waktu Selesai"
+                  name="waktu_selesai"
+                  type="text"
+                  placeholder=""
+                  value={form.waktu_selesai}
+                  readOnly
+                />
+              </div>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <InputGroup
-                label="Waktu Mulai"
-                name="waktu_mulai"
-                type="text"
-                placeholder=""
-                value={form.waktu_mulai}
-                readOnly
-              />
-              <InputGroup
-                label="Waktu Selesai"
-                name="waktu_selesai"
-                type="text"
-                placeholder=""
-                value={form.waktu_selesai}
-                readOnly
-              />
-            </div>
-
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <TextAreaGroup
                 label="Isi"

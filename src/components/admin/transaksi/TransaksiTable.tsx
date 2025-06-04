@@ -13,6 +13,8 @@ import {
 import { withAdminPrefix } from "@/utils/prefixAdminUrl";
 import { PreviewIcon } from "@/components/Tables/icons";
 import { PencilSquareIcon, TrashIcon } from "@/assets/icons";
+import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
+import SkeletonLoader from "@/components/FormElements/Skeleton/SkeletonLoader"
 
 type Transaksi = {
   transaksi_id: number;
@@ -70,10 +72,11 @@ export default function TransaksiTable() {
     }
   };
 
-  if (loading) return <div>Memuat data...</div>;
+  if (loading) return <SkeletonLoader type="form" />;
   if (error) return <div>Error: {error}</div>;
 
   return (
+    <><Breadcrumb pageName="Transaksi" mapName="Page Keuangan"/>
     <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-dark dark:text-white">Daftar Transaksi</h1>
@@ -105,11 +108,29 @@ export default function TransaksiTable() {
               key={item.transaksi_id}
             >
               <TableCell className="pl-5 sm:pl-6 xl:pl-7.5">{i + 1}</TableCell>
-              <TableCell className="capitalize">{item.kategori}</TableCell>
+              {/* <TableCell className="capitalize">{item.kategori}</TableCell> */}
+              <TableCell>
+                  <span
+                    className={`inline-block rounded-full px-3  ${
+                      item.kategori === "pemasukan" ? "border-green hover:bg-green/10 text-green" : "border-red hover:bg-red/10 text-red"
+                    }`}
+                  >
+                    {item.kategori}
+                  </span>
+                </TableCell>
               <TableCell>{item.jenis_transaksi?.jenis_name || "Tidak diketahui"}</TableCell>
               <TableCell>Rp {item.nominal.toLocaleString("id-ID")}</TableCell>
               <TableCell>{item.sumber || "Hamba Allah"}</TableCell>
-              <TableCell className="capitalize">{item.status}</TableCell>
+              {/* <TableCell className="capitalize">{item.status}</TableCell> */}
+              <TableCell>
+                  <span
+                    className={`inline-block rounded-full px-3  ${
+                      item.status === "valid" ? "border border-blue hover:bg-blue/10 text-blue" : ""
+                    }`}
+                  >
+                    {item.status}
+                  </span>
+                </TableCell>
               <TableCell className="pr-5 text-right sm:pr-6 xl:pr-7.5">
                 <div className="flex items-center justify-end gap-x-3.5">
                   <Link
@@ -121,14 +142,14 @@ export default function TransaksiTable() {
                   </Link>
                   <Link
                     href={withAdminPrefix(`/transaksi/edit/${item.transaksi_id}`)}
-                    className="hover:text-primary"
+                    className="hover:text-green"
                     aria-label="Edit Transaksi"
                   >
                     <PencilSquareIcon />
                   </Link>
                   <button
                     onClick={() => handleDelete(item.transaksi_id)}
-                    className="hover:text-primary"
+                    className="hover:text-red"
                     aria-label="Hapus Transaksi"
                   >
                     <TrashIcon />
@@ -140,5 +161,6 @@ export default function TransaksiTable() {
         </TableBody>
       </Table>
     </div>
+    </>
   );
 }
