@@ -1,6 +1,7 @@
-// src/services/auth.ts
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
+
 export const login = async (email: string, password: string) => {
-  const response = await fetch('http://localhost:8000/api/login', {
+  const response = await fetch(`${API_URL}/api/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -8,23 +9,29 @@ export const login = async (email: string, password: string) => {
     body: JSON.stringify({ email, password }),
   });
 
-  const data = await response.json();
+  let data: any;
 
-  if (!response.ok) {
-    throw new Error(data.message || 'Login failed');
+  try {
+    data = await response.json();
+  } catch (error) {
+    throw new Error('Invalid response from server');
   }
 
+  if (!response.ok) {
+    throw new Error(data?.message || 'Login failed');
+  }
+
+  // Simpan token dan user (pastikan XSS dicegah)
   localStorage.setItem('token', data.access_token);
   localStorage.setItem('user', JSON.stringify(data.user));
 
   return data;
 };
 
-//logout
-export async function logout() {
+export const logout = async () => {
   const token = localStorage.getItem('token');
 
-  const res = await fetch('http://localhost:8000/api/logout', {
+  const response = await fetch(`${API_URL}/api/logout`, {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${token}`,
@@ -32,9 +39,11 @@ export async function logout() {
     },
   });
 
-  if (!res.ok) {
+  if (!response.ok) {
     throw new Error('Logout failed');
   }
 
+  // Bersihkan localStorage
   localStorage.removeItem('token');
-}
+  localStorage.removeItem('user');
+};

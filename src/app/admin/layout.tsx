@@ -1,3 +1,5 @@
+'use client';
+
 import "@/css/satoshi.css";
 import "@/css/style.css";
 
@@ -11,17 +13,77 @@ import type { Metadata } from "next";
 import NextTopLoader from "nextjs-toploader";
 import type { PropsWithChildren } from "react";
 import { Providers } from "./providers";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
-export const metadata: Metadata = {
-  title: {
-    template: "%s | NextAdmin - Next.js Dashboard Kit",
-    default: "NextAdmin - Next.js Dashboard Kit",
-  },
-  description:
-    "Next.js admin dashboard toolkit with 200+ templates, UI components, and integrations for fast dashboard development.",
-};
+// Loading component
+const AuthLoading = () => (
+  <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+      <p className="text-gray-600 dark:text-gray-300">Memeriksa autentikasi...</p>
+    </div>
+  </div>
+);
 
-export default function RootLayout({ children }: PropsWithChildren) {
+export default function AdminLayout({ children }: PropsWithChildren) {
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
+  const [user, setUser] = useState(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const userData = localStorage.getItem('user');
+
+        // Jika tidak ada token, redirect ke login
+        if (!token) {
+          router.push('/login/login');
+          return;
+        }
+
+        // Validasi token dengan API (opsional tapi direkomendasikan)
+        const response = await fetch('http://localhost:8000/api/user', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+          },
+        });
+
+        if (response.ok) {
+          const validUser = await response.json();
+          setUser(validUser);
+          setIsAuthenticated(true);
+        } else {
+          // Token tidak valid, hapus dan redirect
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+          router.push('/login/login');
+        }
+      } catch (error) {
+        console.error('Auth check failed:', error);
+        // Jika terjadi error, anggap tidak authenticated
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        router.push('/login/login');
+      }
+    };
+
+    checkAuth();
+  }, [router]);
+
+  // Tampilkan loading saat mengecek authentication
+  if (isAuthenticated === null) {
+    return <AuthLoading />;
+  }
+
+  // Jika tidak authenticated, return null (karena akan redirect)
+  if (!isAuthenticated) {
+    return null;
+  }
+
+  // Jika authenticated, tampilkan layout normal
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
