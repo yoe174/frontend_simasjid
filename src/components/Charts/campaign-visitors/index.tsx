@@ -21,7 +21,7 @@ export async function CampaignVisitors({ className }: { className?: string }) {
           </h2>
 
           <div className="mb-0.5 text-2xl font-bold text-dark dark:text-white">
-            {compactFormat(data.total_visitors)}
+            {/* {compactFormat(data.total_visitors)} */}
           </div>
         </div>
 

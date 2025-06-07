@@ -1,6 +1,7 @@
 // app/admin/admin/create/page.tsx
 "use client";
 
+import { fetchWithToken } from "@/services/auth";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -29,8 +30,8 @@ export default function CreateAdminPage() {
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/role`);
-        const data = await res.json();
+        const data = await fetchWithToken(`/api/role`);
+        // const data = await res.json();
         setRoles(data ?? []); // fallback empty array kalau undefined
       } catch (err) {
         console.error("Gagal ambil role:", err);
@@ -59,19 +60,13 @@ export default function CreateAdminPage() {
     }
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
+      const data = await fetchWithToken(`/api/user`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(form),
       });
-
-      const json = await res.json();
-
-      if (!res.ok) {
-        throw new Error(json.message || "Gagal menyimpan user");
-      }
 
       router.push("/admin/admin");
     } catch (err) {
@@ -83,11 +78,11 @@ export default function CreateAdminPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Create Admin" />
+      <Breadcrumb pageName="Admin" mapName="Create Admin"/>
       <form onSubmit={handleSubmit} className="space-y-9">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-9">
-          <div className="flex flex-col gap-9">
-            <ShowcaseSection title="Form Admin" className="space-y-5.5 !p-6.5">
+        <div className="flex flex-col gap-9">
+          <ShowcaseSection title="Form Admin" className="space-y-5.5 !p-6.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <InputGroup
                 label="Nama"
                 name="name"
@@ -127,8 +122,8 @@ export default function CreateAdminPage() {
                   label: role.role_name,
                 }))}
               />            
-            </ShowcaseSection>
           </div>
+          </ShowcaseSection>
         </div>
 
         {error && <div className="text-red-500">{error}</div>}

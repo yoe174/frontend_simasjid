@@ -1,6 +1,7 @@
 // src/components/informasi/InformasiEdit.tsx
 "use client";
 
+import { fetchWithToken } from "@/services/auth";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -31,8 +32,7 @@ export default function EditInformasiPage() {
   useEffect(() => {
     const fetchInformasi = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/informasi/${id}`);
-        const data = await res.json();
+        const data = await fetchWithToken(`/api/informasi/${id}`);
 
         setForm({
           judul: data.judul,
@@ -83,13 +83,20 @@ export default function EditInformasiPage() {
       if (gambar) formData.append("image", gambar);
       formData.append("_method", "PUT"); // Laravel expects PUT via POST
 
+      const token = localStorage.getItem("token");
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/informasi/${id}`, {
         method: "POST",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        // Jangan set Content-Type karena browser akan atur otomatis untuk FormData
+      },
         body: formData,
       });
 
       const json = await res.json();
-      if (!res.ok) throw new Error(json.message || "Gagal mengupdate informasi");
+    if (!res.ok) throw new Error(json.message || "Gagal mengupdate informasi");
+
 
       router.push("/admin/informasi");
     } catch (err) {

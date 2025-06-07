@@ -3,6 +3,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
+import { fetchWithToken } from "@/services/auth";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import InputGroup from "@/components/FormElements/InputGroup";
 import { Select } from "@/components/FormElements/select";
@@ -16,50 +17,51 @@ type Role = {
 export default function EditAdminPage() {
   const router = useRouter();
   const params = useParams();
-  const { id } = params;
 
   const [roles, setRoles] = useState<Role[]>([]);
   const [form, setForm] = useState({
     name: "",
     email: "",
-    password: "",
+    password: "", // dikosongi, hanya diisi kalau ingin ganti password
     role_id: "",
   });
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Fetch role untuk dropdown
   useEffect(() => {
-    // Ambil data role
     const fetchRoles = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/role`);
-        const data = await res.json();
+        const data = await fetchWithToken(`/api/role`);
         setRoles(data ?? []);
       } catch (err) {
         console.error("Gagal ambil role:", err);
       }
     };
 
-    // Ambil data user by id
+    fetchRoles();
+  }, []);
+
+  // Fetch data user berdasarkan ID
+  useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/${id}`);
-        const data = await res.json();
+        const data = await fetchWithToken(`/api/user/${params.id}`);
         setForm({
-          name: data.name,
-          email: data.email,
-          password: data.password, // password tidak ditampilkan
-          role_id: String(data.role_id),
+          name: data.name || "",
+          email: data.email || "",
+          password: "", // kosongkan, optional untuk update
+          role_id: data.role_id?.toString() || "",
         });
       } catch (err) {
-        console.error("Gagal ambil user:", err);
+        console.error("Gagal ambil data admin:", err);
+        setError("Gagal memuat data admin.");
       }
     };
 
-    fetchRoles();
-    if (id) fetchUser();
-  }, [id]);
+    if (params.id) fetchUser();
+  }, [params.id]);
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -72,30 +74,30 @@ export default function EditAdminPage() {
     setLoading(true);
     setError("");
 
-    if (!form.name || !form.email || !form.password || !form.role_id) {
-      setError("Semua field wajib diisi.");
+    if (!form.name || !form.email || !form.role_id) {
+      setError("Nama, Email, dan Role wajib diisi.");
       setLoading(false);
       return;
     }
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/${id}`, {
+      const body: any = {
+        name: form.name,
+        email: form.email,
+        role_id: parseInt(form.role_id),
+      };
+
+      if (form.password) body.password = form.password;
+
+      await fetchWithToken(`/api/user/${params.id}`, {
         method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(form),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
       });
-
-      const json = await res.json();
-
-      if (!res.ok) {
-        throw new Error(json.message || "Gagal mengupdate user");
-      }
 
       router.push("/admin/admin");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Terjadi kesalahan");
+      setError(err instanceof Error ? err.message : "Terjadi kesalahan.");
     } finally {
       setLoading(false);
     }
@@ -103,11 +105,11 @@ export default function EditAdminPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Edit Admin" />
+      <Breadcrumb pageName="Admin" mapName="Edit Admin" />
       <form onSubmit={handleSubmit} className="space-y-9">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-9">
-          <div className="flex flex-col gap-9">
-            <ShowcaseSection title="Edit Admin" className="space-y-5.5 !p-6.5">
+        <div className="flex flex-col gap-9">
+          <ShowcaseSection title="Edit Admin" className="!p-6.5 space-y-5.5">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <InputGroup
                 label="Nama"
                 name="name"
@@ -126,15 +128,6 @@ export default function EditAdminPage() {
                 onChange={handleChange}
                 required
               />
-              <InputGroup
-                label="Password"
-                name="password"
-                placeholder="Password baru (min 8 karakter)"
-                type="password"
-                value={form.password}
-                onChange={handleChange}
-                required
-              />
               <Select
                 label="Role"
                 placeholder="Pilih Role"
@@ -147,8 +140,16 @@ export default function EditAdminPage() {
                   label: role.role_name,
                 }))}
               />
-            </ShowcaseSection>
-          </div>
+              <InputGroup
+                label="Password (opsional)"
+                name="password"
+                placeholder="Biarkan kosong jika tidak ingin mengubah"
+                type="password"
+                value={form.password}
+                onChange={handleChange}
+              />
+            </div>
+          </ShowcaseSection>
         </div>
 
         {error && <div className="text-red-500">{error}</div>}
@@ -158,7 +159,7 @@ export default function EditAdminPage() {
           disabled={loading}
           className="rounded bg-primary px-6 py-3 text-white transition hover:bg-opacity-90"
         >
-          {loading ? "Menyimpan..." : "Simpan Perubahan"}
+          {loading ? "Menyimpan..." : "Simpan"}
         </button>
       </form>
     </>

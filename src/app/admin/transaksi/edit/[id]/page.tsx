@@ -1,8 +1,8 @@
 // src\app\admin\admin\edit\[id]\page.tsx
 "use client";
 
-import AdminEditPage from "@/components/admin/admin/AdminEdit";
+import TransaksiEditPage from "@/components/admin/transaksi/TransaksiEdit";
 
-export default function AdminEdit() {
-  return <AdminEditPage />;
+export default function TransaksiEdit() {
+  return <TransaksiEditPage />;
 };

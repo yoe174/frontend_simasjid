@@ -1,6 +1,7 @@
 // src\components\admin\admin\AdminTable.tsx
 "use client";
 
+import { fetchWithToken } from "@/services/auth";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
@@ -8,6 +9,7 @@ import { withAdminPrefix } from "@/utils/prefixAdminUrl";
 import { PreviewIcon } from "@/components/Tables/icons";
 import { PencilSquareIcon, TrashIcon } from "@/assets/icons";
 import SkeletonLoader from "@/components/FormElements/Skeleton/SkeletonLoader"
+import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 
 type User = {
   user_id: number;
@@ -28,9 +30,7 @@ export default function AdminTable() {
   // Ambil data user
   const fetchUsers = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user`);
-      if (!res.ok) throw new Error("Gagal mengambil data user");
-      const json = await res.json();
+      const json = await fetchWithToken(`/api/user`);
       setUsers(json.data);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Terjadi kesalahan");
@@ -49,12 +49,10 @@ export default function AdminTable() {
     if (!konfirmasi) return;
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user/${user_id}`, {
+      const json = await fetchWithToken(`/api/user/${user_id}`, {
         method: "DELETE",
       });
 
-      if (!res.ok) throw new Error("Gagal menghapus user");
-      const json = await res.json();
       alert(json.message || "User berhasil dihapus");
 
       // Hapus user dari state
@@ -69,6 +67,8 @@ export default function AdminTable() {
   if (error) return <div>Error: {error}</div>;
 
   return (
+    <>
+    <Breadcrumb pageName="Admin" mapName="Page Admin"/>
     <div className="rounded-[10px] bg-white shadow-1 dark:bg-gray-dark dark:shadow-card p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-dark dark:text-white">Daftar Admin</h1>
@@ -83,7 +83,7 @@ export default function AdminTable() {
       <Table>
         <TableHeader>
           <TableRow className="border-t text-base [&>th]:h-auto [&>th]:py-3 sm:[&>th]:py-4.5">
-            <TableHead className="min-w-[40px] pl-5 sm:pl-6 xl:pl-7.5">#</TableHead>
+            <TableHead className="min-w-[40px] pl-5 sm:pl-6 xl:pl-7.5">ID</TableHead>
             <TableHead className="min-w-[200px]">Username</TableHead>
             <TableHead>Email</TableHead>
             {/* <TableHead>Password</TableHead> */}
@@ -98,7 +98,7 @@ export default function AdminTable() {
               className="text-base font-medium text-dark dark:text-white"
               key={user.user_id}
             >
-              <TableCell className="pl-5 sm:pl-6 xl:pl-7.5">{i + 1}</TableCell>
+              <TableCell className="pl-5 sm:pl-6 xl:pl-7.5">{user.user_id}</TableCell>
               <TableCell>{user.name}</TableCell>
               <TableCell>{user.email}</TableCell>
               {/* <TableCell>{user.password}</TableCell> */}
@@ -114,15 +114,15 @@ export default function AdminTable() {
                   </Link>
                   <Link
                     href={withAdminPrefix(`/admin/edit/${user.user_id}`)}
-                    className="hover:text-primary"
-                    aria-label="Edit User"
+                    className="hover:text-green"
+                    aria-label="Edit Admin"
                   >
                     <PencilSquareIcon />
                   </Link>
                   <button
                     onClick={() => handleDelete(user.user_id)}
-                    className="hover:text-primary"
-                    aria-label="Hapus User"
+                    className="hover:text-red"
+                    aria-label="Hapus Admin"
                   >
                     <TrashIcon />
                   </button>
@@ -133,5 +133,6 @@ export default function AdminTable() {
         </TableBody>
       </Table>
     </div>
+    </>
   );
 }

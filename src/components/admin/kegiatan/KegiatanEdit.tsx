@@ -86,8 +86,14 @@ export default function KegiatanEditPage() {
       if (image) formData.append("image", image);
       formData.append("_method", "PUT");
 
+      const token = localStorage.getItem("token");
+      
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/kegiatan/${id}`, {
         method: "POST",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        // Jangan set Content-Type karena browser akan atur otomatis untuk FormData
+      },
         body: formData,
       });
 

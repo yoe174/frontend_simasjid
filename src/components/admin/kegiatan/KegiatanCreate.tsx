@@ -63,8 +63,14 @@ export default function CreateKegiatanPage() {
       Object.entries(form).forEach(([key, value]) => data.append(key, value));
       if (image) data.append("image", image);
 
+      const token = localStorage.getItem("token");
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/kegiatan`, {
         method: "POST",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        // Jangan set Content-Type karena browser akan atur otomatis untuk FormData
+      },
         body: data,
       });
 
@@ -96,29 +102,54 @@ export default function CreateKegiatanPage() {
                 onChange={handleChange}
                 required
               />
-              <DatePickerOne
+              <InputGroup
+                label="Tanggal"
+                name="tanggal"
+                placeholder=""
+                type="date"
+                value={form.tanggal}
+                onChange={handleChange}
+                required
+              />
+              {/* <DatePickerOne
                 label="Tanggal"
                 name="tanggal"
                 value={form.tanggal}
                 onChange={(name, value) => setForm({ ...form, [name]: value })}
-                />
+                /> */}
             </div>
 
             {/* Baris 2 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                <TimePickerAntd
+                <InputGroup
+                  label="Waktu Mulai"
+                  name="waktu_mulai"
+                  placeholder=""
+                  type="time"
+                  value={form.waktu_mulai}
+                  onChange={handleChange}
+                />
+                <InputGroup
+                  label="Waktu Selesai"
+                  name="waktu_selesai"
+                  placeholder=""
+                  type="time"
+                  value={form.waktu_selesai}
+                  onChange={handleChange}
+                />
+                {/* <TimePickerAntd
                     label="Waktu Mulai"
                     name="waktu_mulai"
                     value={form.waktu_mulai || ""}
                     onChange={(name, value) => setForm({ ...form, [name]: value })}
-                />
+                /> */}
 
-                <TimePickerAntd
+                {/* <TimePickerAntd
                     label="Waktu Selesai"
                     name="waktu_selesai"
                     value={form.waktu_selesai || ""}
                     onChange={(name, value) => setForm({ ...form, [name]: value })}
-                />
+                /> */}
             </div>
             {/* Baris 3 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

@@ -1,8 +1,8 @@
-// src\app\admin\admin\edit\[id]\page.tsx
+// src\app\admin\reservasi\edit\[id]\page.tsx
 "use client";
 
-import EditReservasi from "@/components/admin/reservasi/ReservasiEdit";
+import EditReservasiPage from "@/components/admin/reservasi/ReservasiEdit";
 
 export default function AdminEdit() {
-  return <EditReservasi />;
+  return <EditReservasiPage />;
 };

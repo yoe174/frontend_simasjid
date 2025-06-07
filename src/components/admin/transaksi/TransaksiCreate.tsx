@@ -1,46 +1,53 @@
+// src\components\admin\transaksi\TransaksiCreate.tsx
 "use client";
 
-import { useEffect, useState } from "react";
+import { fetchWithToken } from "@/services/auth";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
 import InputGroup from "@/components/FormElements/InputGroup";
-import TextAreaGroup from "@/components/FormElements/InputGroup";
+import { TextAreaGroup } from "@/components/FormElements/InputGroup/text-area";
 import { Select } from "@/components/FormElements/select";
 import { ShowcaseSection } from "@/components/Layouts/showcase-section";
 
-type JenisTransaksi = {
-  jenis_transaksi_id: number;
-  jenis_name: string;
-};
-
 export default function CreateTransaksiPage() {
   const router = useRouter();
-  const [jenisList, setJenisList] = useState<JenisTransaksi[]>([]);
+
   const [form, setForm] = useState({
     kategori: "",
     jenis_transaksi_id: "",
     nominal: "",
     sumber: "",
-    mengetahui: "",
-    status: "draft",
     keterangan: "",
   });
+
+  const [jenisTransaksiOptions, setJenisTransaksiOptions] = useState<
+    { value: string; label: string }[]
+  >([]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Ambil data dropdown jenis_transaksi dari API
   useEffect(() => {
-    const fetchJenis = async () => {
+    const fetchJenisTransaksi = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/jenis_transaksi`);
-        const data = await res.json();
-        setJenisList(data ?? []);
-        console.log("data" , data)
+        const data = await fetchWithToken(`/api/jenis_transaksi`);
+        if (Array.isArray(data)) {
+          const options = data.map((item: any) => ({
+            value: item.jenis_transaksi_id.toString(),
+            label: item.jenis_name,
+          }));
+          setJenisTransaksiOptions(options);
+        } else {
+          console.warn("Data bukan array:", data);
+        }
       } catch (err) {
-        console.error("Gagal ambil data jenis transaksi:", err);
+        console.error("Gagal mengambil data jenis transaksi:", err);
       }
     };
-    fetchJenis();
+
+    fetchJenisTransaksi();
   }, []);
 
   const handleChange = (
@@ -54,33 +61,24 @@ export default function CreateTransaksiPage() {
     setLoading(true);
     setError("");
 
-    const { kategori, jenis_transaksi_id, nominal, mengetahui } = form;
-
-    if (!kategori || !jenis_transaksi_id || !nominal || !mengetahui) {
-      setError("Field dengan tanda * wajib diisi.");
+    if (!form.kategori || !form.jenis_transaksi_id || !form.nominal ) {
+      setError("Semua field bertanda * wajib diisi.");
       setLoading(false);
       return;
     }
 
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transaksi`, {
+      await fetchWithToken(`/api/transaksi`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           ...form,
           nominal: parseFloat(form.nominal),
         }),
       });
 
-      const json = await res.json();
-
-      if (!res.ok) throw new Error(json.message || "Gagal menyimpan transaksi");
-
       router.push("/admin/transaksi");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Terjadi kesalahan saat menyimpan");
+      setError(err instanceof Error ? err.message : "Terjadi kesalahan");
     } finally {
       setLoading(false);
     }
@@ -88,41 +86,40 @@ export default function CreateTransaksiPage() {
 
   return (
     <>
-      <Breadcrumb pageName="Create Transaksi" />
+      <Breadcrumb pageName="Transaksi" mapName="Create Transaksi" />
       <form onSubmit={handleSubmit} className="space-y-9">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-9">
-          <div className="flex flex-col gap-9">
-            <ShowcaseSection title="Form Transaksi" className="space-y-5.5 !p-6.5">
+        <div className="flex flex-col gap-9">
+          <ShowcaseSection title="Form Transaksi" className="!p-6.5 space-y-5.5">
+            {/* Kategori & Jenis Transaksi */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <Select
                 label="Kategori"
-                placeholder="Pilih kategori"
-                className="kategori"
+                placeholder="Pilih Kategori"
                 value={form.kategori}
-                onChange={handleChange}
+                onChange={(e) => setForm({ ...form, kategori: e.target.value })}
                 items={[
                   { value: "pemasukan", label: "Pemasukan" },
                   { value: "pengeluaran", label: "Pengeluaran" },
                 ]}
               />
-
               <Select
                 label="Jenis Transaksi"
-                placeholder="Pilih jenis transaksi"
-                className="jenis_transaksi_id"
+                placeholder="Pilih Jenis"
                 value={form.jenis_transaksi_id}
-                // onChange={handleChange}
-                onChange={(e) => setForm({ ...form, jenis_transaksi_id: e.target.value })}
-                items={jenisList.map((jenis) => ({
-                  value: String(jenis.jenis_transaksi_id),
-                  label: jenis.jenis_name,
-                }))}
+                onChange={(e) =>
+                  setForm({ ...form, jenis_transaksi_id: e.target.value })
+                }
+                items={jenisTransaksiOptions}
               />
+            </div>
 
+            {/* Nominal & Sumber */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <InputGroup
                 label="Nominal"
                 name="nominal"
-                type="number"
                 placeholder="Masukkan nominal"
+                type="number"
                 value={form.nominal}
                 onChange={handleChange}
                 required
@@ -131,42 +128,22 @@ export default function CreateTransaksiPage() {
               <InputGroup
                 label="Sumber"
                 name="sumber"
+                placeholder="Contoh: Infaq, kotak amal, dll"
                 type="text"
-                placeholder="Misalnya: hamba Allah"
                 value={form.sumber}
                 onChange={handleChange}
               />
-
-              <InputGroup
-                label="Mengetahui *"
-                name="mengetahui"
-                type="text"
-                placeholder="Nama yang mengetahui"
-                value={form.mengetahui}
-                onChange={handleChange}
-                required
-              />
-
-              {/* <Select
-                label="Status"
-                placeholder="Pilih Role"
-                value={form.status}
-                onChange={handleChange}
-                items={[
-                  { value: "draft", label: "Draft" },
-                  { value: "valid", label: "Valid" },
-                ]}
-              /> */}
-
-              {/* <TextAreaGroup
+            </div>
+            <div>
+              <TextAreaGroup
                 label="Keterangan"
                 name="keterangan"
-                placeholder="Tuliskan keterangan tambahan"
+                placeholder="Keterangan tambahan"
                 value={form.keterangan}
                 onChange={handleChange}
-              /> */}
-            </ShowcaseSection>
-          </div>
+              />
+            </div>
+          </ShowcaseSection>
         </div>
 
         {error && <div className="text-red-500">{error}</div>}

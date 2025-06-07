@@ -1,6 +1,7 @@
 // src\components\admin\informasi\InformasiCreate.tsx
 "use client";
 
+import { fetchWithToken } from "@/services/auth";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -57,8 +58,14 @@ export default function CreateInformasiPage() {
       data.append("keterangan", form.keterangan);
       if (image) data.append("image", image);
 
+      const token = localStorage.getItem("token");
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/informasi`, {
         method: "POST",
+        headers: {
+        Authorization: `Bearer ${token}`,
+        // Jangan set Content-Type karena browser akan atur otomatis untuk FormData
+      },
         body: data,
       });
 

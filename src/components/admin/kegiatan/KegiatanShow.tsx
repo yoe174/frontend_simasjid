@@ -1,6 +1,7 @@
 // src\components\admin\kegiatan\KegiatanShow.tsx
 "use client";
 
+import { fetchWithToken } from "@/services/auth"; 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -41,9 +42,8 @@ export default function ShowKegiatanPage() {
   useEffect(() => {
     const fetchKegiatan = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/kegiatan/${id}`);
-        const data = await res.json();
-
+        const data = await fetchWithToken(`/api/kegiatan/${id}`);
+        
         setForm({
           kegiatan_id: data.kegiatan_id,
           nama_kegiatan: data.nama_kegiatan,

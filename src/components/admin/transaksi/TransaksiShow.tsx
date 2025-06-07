@@ -1,6 +1,7 @@
 // src\components\admin\transaksi\TransaksiShow.tsx
 "use client";
 
+import { fetchWithToken } from "@/services/auth";
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -43,8 +44,7 @@ export default function ShowTransaksiPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/transaksi/${id}`);
-        const json = await res.json();
+        const json = await fetchWithToken(`/api/transaksi/${id}`);
         setData(json);
       } catch (err) {
         console.error("Gagal mengambil detail transaksi:", err);
@@ -54,7 +54,7 @@ export default function ShowTransaksiPage() {
     if (id) fetchData();
   }, [id]);
 
-  if (!data) return <div className="text-center py-10">Memuat data transaksi...</div>;
+  if (!data) return <div className="text-center py-10">Memuat data</div>;
 
   return (
     <>
@@ -87,9 +87,7 @@ export default function ShowTransaksiPage() {
                 value={formatTanggal(data.updated_at)}
                 readOnly
               />
-            </div>
-
-            
+            </div>            
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
@@ -153,7 +151,7 @@ export default function ShowTransaksiPage() {
             label="Keterangan"
             name="keterangan"
             placeholder=""
-            value={data.keterangan || ""}
+            value={data.keterangan}
             disabled
           />
         </ShowcaseSection>

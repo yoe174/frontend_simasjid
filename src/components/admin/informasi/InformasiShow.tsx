@@ -1,6 +1,7 @@
 // src\components\admin\informasi\InformasiShow.tsx
 "use client";
 
+import { fetchWithToken } from "@/services/auth"; 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Breadcrumb from "@/components/Breadcrumbs/Breadcrumb";
@@ -39,9 +40,8 @@ export default function ShowInformasiPage() {
   useEffect(() => {
     const fetchInformasi = async () => {
       try {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/informasi/${id}`);
-        const data = await res.json();
-
+        const data = await fetchWithToken(`/api/informasi/${id}`);
+        
         setForm({
           informasi_id: data.informasi_id,
           judul: data.judul,

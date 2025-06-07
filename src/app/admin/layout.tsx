@@ -44,7 +44,7 @@ export default function AdminLayout({ children }: PropsWithChildren) {
         }
 
         // Validasi token dengan API (opsional tapi direkomendasikan)
-        const response = await fetch('http://localhost:8000/api/user', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/user`, {
           headers: {
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json',
