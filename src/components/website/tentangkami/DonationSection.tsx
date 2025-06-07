@@ -62,14 +62,14 @@ const DonationSection = () => {
                   <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                     <p className="text-emerald-300 text-sm font-medium mb-1">NOMOR REKENING</p>
                     <div className="flex items-center gap-3">
-                      <p className="text-white font-bold text-2xl font-mono">27-272-2727</p>
+                      <p className="text-white font-bold text-2xl font-mono">7300744456</p>
                     </div>
                   </div>
                   
                   {/* Account Name */}
                   <div className="bg-white/5 rounded-xl p-4 border border-white/10">
                     <p className="text-emerald-300 text-sm font-medium mb-1">ATAS NAMA</p>
-                    <p className="text-white font-bold text-xl">MASJID AL MUHAJIRIN</p>
+                    <p className="text-white font-bold text-xl">MASJID AL ALMUSLIMUN</p>
                   </div>
                 </div>
               </div>

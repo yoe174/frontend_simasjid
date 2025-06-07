@@ -25,8 +25,8 @@ const EventsSection = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Base URL untuk API - sesuaikan dengan URL Laravel Anda
-  const API_BASE_URL = 'http://127.0.0.1:8000/api';
+  // Base URL untuk API - menggunakan environment variable
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
 
   // Function untuk menentukan status berdasarkan tanggal
   const getAutoStatus = (eventDate: string): 'dijadwalkan' | 'dilaksanakan' | 'selesai' => {
@@ -49,7 +49,7 @@ const EventsSection = () => {
   const fetchEvents = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/kegiatan`, {
+      const response = await fetch(`${API_BASE_URL}/api/kegiatan`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ const EventsSection = () => {
   // Fetch single event detail - Fixed to use kegiatan_id
   const fetchEventDetail = async (kegiatan_id: number) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/kegiatan/${kegiatan_id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/kegiatan/${kegiatan_id}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -191,7 +191,7 @@ const EventsSection = () => {
   // Get image URL
   const getImageUrl = (imagePath?: string) => {
     if (!imagePath) return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjMzM0MTU1Ii8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGlkYWsgQWRhIEdhbWJhcjwvdGV4dD4KPC9zdmc+';
-    return imagePath.startsWith('http') ? imagePath : `http://localhost:8000/storage/${imagePath}`;
+    return imagePath.startsWith('http') ? imagePath : `${API_BASE_URL}/storage/${imagePath}`;
   };
 
   if (loading) {

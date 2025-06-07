@@ -28,6 +28,11 @@ export function Sidebar() {
     // Keep collapsible open, when it's subpage is active
     NAV_DATA.some((section) => {
       return section.items.some((item) => {
+        // Check if item.items exists and is an array
+        if (!item.items || !Array.isArray(item.items)) {
+          return false;
+        }
+
         return item.items.some((subItem) => {
           if (subItem.url === pathname) {
             if (!expandedItems.includes(item.title)) {
@@ -37,10 +42,11 @@ export function Sidebar() {
             // Break the loop
             return true;
           }
+          return false;
         });
       });
     });
-  }, [pathname]);
+  }, [pathname, expandedItems]);
 
   return (
     <>
@@ -97,7 +103,7 @@ export function Sidebar() {
                   <ul className="space-y-2">
                     {section.items.map((item) => (
                       <li key={item.title}>
-                        {item.items.length ? (
+                        {item.items && item.items.length > 0 ? (
                           <div>
                             <MenuItem
                               isActive={item.items.some(
@@ -130,12 +136,12 @@ export function Sidebar() {
                                 {item.items.map((subItem) => (
                                   <li key={subItem.title} role="none">
                                     <MenuItem
-                                      as="link"
-                                      href={subItem.url}
-                                      isActive={pathname === subItem.url}
-                                    >
-                                      <span>{subItem.title}</span>
-                                    </MenuItem>
+                                        as="link"
+                                        href={subItem.url ?? "/"}
+                                        isActive={pathname === subItem.url}
+                                      >
+                                        <span>{subItem.title}</span>
+                                      </MenuItem>
                                   </li>
                                 ))}
                               </ul>
@@ -143,9 +149,9 @@ export function Sidebar() {
                           </div>
                         ) : (
                           (() => {
-                            const href =
-                              "url" in item
-                                ? item.url + ""
+                            const href: string =
+                              "url" in item && typeof item.url === "string" && item.url
+                                ? item.url
                                 : "/" +
                                   item.title.toLowerCase().split(" ").join("-");
 

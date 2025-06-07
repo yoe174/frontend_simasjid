@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 export default function FormElementsPage() {
   return (
     <>
-      <Breadcrumb pageName="Form Elements" mapName=""/>
+      <Breadcrumb pageName="Form Elements" mapName="UI Components" />
 
       <div className="grid grid-cols-1 gap-9 sm:grid-cols-2">
         <div className="flex flex-col gap-9">
@@ -57,7 +57,6 @@ export default function FormElementsPage() {
           </ShowcaseSection>
 
           <ShowcaseSection title="Time and date" className="space-y-5.5 !p-6.5">
-            {/* <DatePickerOne /> */}
             <DatePickerTwo />
           </ShowcaseSection>
 
@@ -101,12 +100,12 @@ export default function FormElementsPage() {
           <ShowcaseSection title="Select input" className="space-y-5.5 !p-6.5">
             <Select
               label="Select Country"
+              placeholder="Choose a country"
               items={[
                 { label: "United States", value: "USA" },
                 { label: "United Kingdom", value: "UK" },
                 { label: "Canada", value: "Canada" },
               ]}
-              defaultValue="USA"
               prefixIcon={<GlobeIcon />}
             />
             <MultiSelect id="multiSelect" />

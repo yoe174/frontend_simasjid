@@ -43,7 +43,7 @@ const Navbar = () => {
           <Link href="/website/beranda" className="flex items-center group">
             <div className="relative overflow-hidden rounded-full p-2 group-hover:bg-amber-50 transition-colors duration-300">
               <Image
-                src="/image/logomasjid2.png" 
+                src="/image/logobaru.png" 
                 alt="Masjid Raya Al-Muhajjirin Logo"
                 width={150}
                 height={150}

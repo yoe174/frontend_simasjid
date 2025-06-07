@@ -59,7 +59,7 @@ const MapSection: React.FC = () => {
         {/* Map Card */}
         <div className="w-full md:w-9/12 h-64 md:h-auto rounded-lg overflow-hidden relative">
          <iframe
-    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.5325724742365!2d112.596227!3d-7.943785999999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e78826aa62c5cf1%3A0x6182180b9250f37e!2sMosque%20Al-Muhajirin!5e0!3m2!1sen!2sid!4v1747799952288!5m2!1sen!2sid"
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3951.5065052327127!2d112.6282180210682!3d-7.946494185444574!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2dd629db861fe077%3A0x78602e7256d6bc13!2sAL%20MUSLIMUN%20Mosque!5e0!3m2!1sen!2sid!4v1749038936864!5m2!1sen!2sid"
     width="100%"
     height="100%"
     style={{ border: 0 }}

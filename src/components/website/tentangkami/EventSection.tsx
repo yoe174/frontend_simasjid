@@ -21,12 +21,20 @@ const InformasiSection = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Get API URL from environment variables
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   // Fetch data from API
   useEffect(() => {
     const fetchInformasi = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://127.0.0.1:8000/api/informasi');
+        
+        if (!API_URL) {
+          throw new Error('API URL tidak ditemukan. Pastikan NEXT_PUBLIC_API_URL sudah diatur di file .env');
+        }
+        
+        const response = await fetch(`${API_URL}/api/informasi`);
         
         if (!response.ok) {
           throw new Error('Gagal mengambil data informasi');
@@ -48,7 +56,7 @@ const InformasiSection = () => {
     };
 
     fetchInformasi();
-  }, []);
+  }, [API_URL]);
 
   const openModal = (informasi: InformasiData) => {
     setSelectedInformasi(informasi);
@@ -71,7 +79,10 @@ const InformasiSection = () => {
 
   const getImageUrl = (imagePath: string | null) => {
     if (!imagePath) return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDQwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSI0MDAiIGhlaWdodD0iMzAwIiBmaWxsPSIjMzM0MTU1Ii8+Cjx0ZXh0IHg9IjIwMCIgeT0iMTUwIiBmaWxsPSJ3aGl0ZSIgdGV4dC1hbmNob3I9Im1pZGRsZSI+VGlkYWsgQWRhIEdhbWJhcjwvdGV4dD4KPC9zdmc+'; // Fallback image
-    return `http://127.0.0.1:8000/storage/${imagePath}`;
+    
+    if (!API_URL) return imagePath;
+    
+    return `${API_URL}/storage/${imagePath}`;
   };
 
   if (loading) {
