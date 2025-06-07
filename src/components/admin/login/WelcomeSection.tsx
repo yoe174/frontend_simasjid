@@ -33,7 +33,7 @@ const WelcomeSection: React.FC = () => {
         </div>
 
         {/* Quick Info Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+        {/* <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
           <div className="bg-gradient-to-br from-blue-500/30 to-blue-600/30 backdrop-blur-md rounded-xl p-4 border border-blue-300/30 shadow-lg">
             <div className="text-2xl mb-2">🔐</div>
             <p className="text-sm text-blue-100 font-medium">Akses Aman</p>
@@ -46,7 +46,7 @@ const WelcomeSection: React.FC = () => {
             <div className="text-2xl mb-2">🎨</div>
             <p className="text-sm text-teal-100 font-medium">Kelola Website</p>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Decorative Elements - Repositioned */}

@@ -23,7 +23,7 @@ const QRInfaqSection = () => {
               <div className="relative transform group-hover:scale-105 transition duration-500">
                 {/* Replace with your QRIS image */}
                 <Image 
-                  src="/image/qristes.jpg" 
+                  src="/image/qrismasjid.jpg" 
                   alt="QRIS Masjid Al Muhajirin" 
                   width={400} 
                   height={500} 

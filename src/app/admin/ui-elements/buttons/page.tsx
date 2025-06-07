@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <>
-      <Breadcrumb pageName="Buttons" />
+      <Breadcrumb pageName="Buttons" mapName ="Authentication" />
 
       <div className="space-y-10">
         <ShowcaseSection title="Normal Button">

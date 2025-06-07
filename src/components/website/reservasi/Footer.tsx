@@ -12,7 +12,7 @@ const Footer: React.FC = () => {
           <div className="flex items-center mb-8">
             <div className="mr-4 w-[130px] h-[130px] flex items-center justify-center overflow-hidden">
           <Image 
-            src="/image/logomasjid2.png" 
+            src="/image/logobaru.png" 
             alt="Masjid Raya Al-Muhajjirin Logo" 
             width={300} // Bebas diperbesar
             height={300} 
@@ -21,7 +21,7 @@ const Footer: React.FC = () => {
         </div>
             <div>
               <p className="text-sm font-bold text-gray-600">Masjid </p>
-              <h2 className="text-2xl font-bold text-blue-900">Al-Muhajirin</h2>
+              <h2 className="text-2xl font-bold text-blue-900">Al-Muslimun</h2>
             </div>
           </div>
         </div>
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
             <div>
               <h3 className="font-bold text-gray-800">Alamat Lengkap</h3>
               <p className="text-sm text-gray-600 mt-2">
-                Jl. Perum Joyo Grand, RW.08, Merjosari, Kec. Lowokwaru, Kota Malang, Jawa Timur 65144
+                Jl. Cengger Ayam DLM No.67, Tulusrejo, Kec. Lowokwaru, Kota Malang, Jawa Timur 65141
               </p>
             </div>
           </div>
@@ -58,7 +58,7 @@ const Footer: React.FC = () => {
             <div>
               <h3 className="font-bold text-gray-800">Email</h3>
               <p className="text-sm text-gray-600 mt-2">
-                masjidalmuhajirin@gmail.com
+                masjidalmuslimun@gmail.com
               </p>
             </div>
           </div>
@@ -111,7 +111,7 @@ const Footer: React.FC = () => {
 
         {/* Copyright Section */}
         <div className="border-t border-gray-200 pt-6 flex flex-col md:flex-row justify-between items-center">
-          <p className="text-gray-600 mb-4 md:mb-0">Dewan Kemakmuran Masjid Al-Muhajirin Malang</p>
+          <p className="text-gray-600 mb-4 md:mb-0">Dewan Kemakmuran Masjid Al-Muslimun Malang</p>
           <p className="text-gray-600">Copyright © 2025</p>
         </div>
       </div>
