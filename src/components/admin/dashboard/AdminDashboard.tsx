@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Users, Info, Calendar, Clock, TrendingUp, TrendingDown, DollarSign, BarChart3 } from 'lucide-react';
+import { Users, Info, Calendar, Clock, TrendingUp, TrendingDown, DollarSign, BarChart3, PieChart } from 'lucide-react';
 
 // Type definitions
 interface StatItem {
@@ -16,35 +16,19 @@ interface StatItem {
   value: number;
 }
 
-interface FinanceItem {
-  category: string;
-  amount: number;
-  target: number;
-  percentage: number;
-  color: string;
-  icon: React.ComponentType<any>;
-}
-
-interface ChartSeries {
-  name: string;
-  data: number[];
+interface TransaksiSummary {
+  pemasukan: number;
+  pengeluaran: number;
+  draft: number;
+  saldo_tunai: number;
+  saldo_rekening: number;
+  total_saldo: number;
 }
 
 interface ChartData {
-  series: ChartSeries[];
-  options: {
-    chart: {
-      type: string;
-      height: number;
-      toolbar: {
-        show: boolean;
-      };
-    };
-    colors: string[];
-    xaxis: {
-      categories: string[];
-    };
-  } | null;
+  labels: string[];
+  pemasukan: number[];
+  pengeluaran: number[];
 }
 
 const AdminDashboard = () => {
@@ -52,15 +36,62 @@ const AdminDashboard = () => {
   const [animationKey, setAnimationKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState<StatItem[]>([]);
-  const [financeData, setFinanceData] = useState<FinanceItem[]>([]);
-  const [chartData, setChartData] = useState<ChartData>({
-    series: [],
-    options: null
+  const [transaksiSummary, setTransaksiSummary] = useState<TransaksiSummary>({
+    pemasukan: 0,
+    pengeluaran: 0,
+    draft: 0,
+    saldo_tunai: 0,
+    saldo_rekening: 0,
+    total_saldo: 0
   });
+
+  // Function to get auth token from localStorage or cookies
+  const getAuthToken = (): string | null => {
+    // Try to get token from localStorage first
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('token') || 
+             localStorage.getItem('auth_token') || 
+             localStorage.getItem('access_token') ||
+             sessionStorage.getItem('token') ||
+             sessionStorage.getItem('auth_token') ||
+             sessionStorage.getItem('access_token');
+    }
+    return null;
+  };
+
+  // Function to make authenticated API request
+  const fetchWithAuth = async (url: string) => {
+    const token = getAuthToken();
+    
+    if (!token) {
+      throw new Error('No authentication token found');
+    }
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    });
+
+    if (response.status === 401) {
+      // Token might be expired, redirect to login
+      console.error('Authentication failed, token might be expired');
+      throw new Error('Authentication failed');
+    }
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    return response.json();
+  };
 
   // Fetch data statistik dari API
   const fetchStats = async () => {
-    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+    const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://be.masjidin.my.id';
     
     const endpoints: Omit<StatItem, 'value'>[] = [
       {
@@ -108,11 +139,19 @@ const AdminDashboard = () => {
     try {
       const fetchPromises = endpoints.map(async (endpoint): Promise<StatItem> => {
         try {
-          const response = await fetch(endpoint.url);
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+          let data;
+          
+          // For protected endpoints (user and reservasi), use authenticated request
+          if (endpoint.url.includes('/user') || endpoint.url.includes('/reservasi')) {
+            data = await fetchWithAuth(endpoint.url);
+          } else {
+            // For public endpoints (informasi and kegiatan), use normal fetch
+            const response = await fetch(endpoint.url);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            data = await response.json();
           }
-          const data = await response.json();
           
           let count = 0;
           if (Array.isArray(data)) {
@@ -135,7 +174,7 @@ const AdminDashboard = () => {
           console.error(`Error fetching ${endpoint.title}:`, error);
           return {
             ...endpoint,
-            value: Math.floor(Math.random() * 50) + 1 // Demo data
+            value: 0
           };
         }
       });
@@ -146,87 +185,29 @@ const AdminDashboard = () => {
       console.error('Error fetching stats:', error);
       const fallbackStats: StatItem[] = endpoints.map(endpoint => ({
         ...endpoint,
-        value: Math.floor(Math.random() * 50) + 1 // Demo data
+        value: 0
       }));
       setStats(fallbackStats);
     }
   };
 
-  // Fetch data keuangan dari API
-  const fetchFinanceData = async () => {
+  // Fetch data summary transaksi dari API
+  const fetchTransaksiSummary = async () => {
     try {
-      const mockFinanceData: FinanceItem[] = [
-        {
-          category: 'Donasi',
-          amount: 15750000,
-          target: 21000000,
-          percentage: 75,
-          color: 'bg-gradient-to-r from-emerald-400 to-emerald-500',
-          icon: TrendingUp
-        },
-        {
-          category: 'Zakat',
-          amount: 8500000,
-          target: 13000000,
-          percentage: 65,
-          color: 'bg-gradient-to-r from-blue-400 to-blue-500',
-          icon: TrendingUp
-        },
-        {
-          category: 'Infaq',
-          amount: 5200000,
-          target: 11500000,
-          percentage: 45,
-          color: 'bg-gradient-to-r from-purple-400 to-purple-500',
-          icon: TrendingUp
-        },
-        {
-          category: 'Operasional',
-          amount: 12300000,
-          target: 14500000,
-          percentage: 85,
-          color: 'bg-gradient-to-r from-rose-400 to-rose-500',
-          icon: TrendingDown
-        }
-      ];
-      
-      setFinanceData(mockFinanceData);
-      
-      // Prepare chart data
-      const chartConfig: ChartData = {
-        series: [
-          {
-            name: 'Pemasukan',
-            data: [15750000, 8500000, 5200000]
-          },
-          {
-            name: 'Target',
-            data: [21000000, 13000000, 11500000]
-          },
-          {
-            name: 'Pengeluaran',
-            data: [0, 0, 12300000]
-          }
-        ],
-        options: {
-          chart: {
-            type: 'bar',
-            height: 350,
-            toolbar: {
-              show: false
-            }
-          },
-          colors: ['#10b981', '#3b82f6', '#ef4444'],
-          xaxis: {
-            categories: ['Donasi', 'Zakat', 'Infaq/Operasional']
-          }
-        }
-      };
-      
-      setChartData(chartConfig);
+      const baseUrl = process.env.NEXT_PUBLIC_API_URL || 'https://be.masjidin.my.id';
+      const data = await fetchWithAuth(`${baseUrl}/api/transaksi/summary`);
+      setTransaksiSummary(data);
     } catch (error) {
-      console.error('Error fetching finance data:', error);
-      setFinanceData([]);
+      console.error('Error fetching transaksi summary:', error);
+      // Set default values jika gagal fetch
+      setTransaksiSummary({
+        pemasukan: 0,
+        pengeluaran: 0,
+        draft: 0,
+        saldo_tunai: 0,
+        saldo_rekening: 0,
+        total_saldo: 0
+      });
     }
   };
 
@@ -243,7 +224,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const loadData = async () => {
       setLoading(true);
-      await Promise.all([fetchStats(), fetchFinanceData()]);
+      await Promise.all([fetchStats(), fetchTransaksiSummary()]);
       setLoading(false);
     };
     
@@ -254,7 +235,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const refreshTimer = setInterval(() => {
       fetchStats();
-      fetchFinanceData();
+      fetchTransaksiSummary();
     }, 30000);
 
     return () => clearInterval(refreshTimer);
@@ -294,6 +275,18 @@ const AdminDashboard = () => {
     });
   };
 
+  // Data untuk chart
+  const chartData: ChartData = {
+    labels: ['Pemasukan', 'Pengeluaran'],
+    pemasukan: [transaksiSummary.pemasukan],
+    pengeluaran: [transaksiSummary.pengeluaran]
+  };
+
+  const maxValue = Math.max(transaksiSummary.pemasukan, transaksiSummary.pengeluaran);
+  const totalTransaksi = transaksiSummary.pemasukan + transaksiSummary.pengeluaran;
+  const pemasukanPercentage = totalTransaksi > 0 ? (transaksiSummary.pemasukan / totalTransaksi) * 100 : 50;
+  const pengeluaranPercentage = totalTransaksi > 0 ? (transaksiSummary.pengeluaran / totalTransaksi) * 100 : 50;
+
   return (
     <div className="min-h-screen transition-colors duration-300 bg-gray-50 dark:bg-gray-900">
       <div className="p-6 space-y-8">
@@ -303,7 +296,7 @@ const AdminDashboard = () => {
           </div>
         )}
         
-        {/* Header Section dengan gaya rounded seperti InformasiTable */}
+        {/* Header Section */}
         <div className="rounded-[10px] bg-white dark:bg-gray-800 shadow-1 dark:shadow-card border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center space-y-4 lg:space-y-0">
             <div className="space-y-2">
@@ -362,155 +355,210 @@ const AdminDashboard = () => {
           })}
         </div>
 
-        {/* Finance Section dengan rounded style */}
+        {/* Chart Section */}
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-          {/* Finance Cards */}
+          {/* Bar Chart */}
           <div className="rounded-[10px] bg-white dark:bg-gray-800 shadow-1 dark:shadow-card border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300">
             <div className="flex items-center space-x-3 mb-8">
-              <div className="p-3 bg-gradient-to-br from-emerald-400 to-blue-500 rounded-xl">
-                <DollarSign className="w-6 h-6 text-white" />
+              <div className="p-3 bg-gradient-to-br from-blue-400 to-purple-500 rounded-xl">
+                <BarChart3 className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white transition-colors duration-300">Laporan Keuangan</h2>
-                <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Status keuangan masjid bulan ini</p>
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-white transition-colors duration-300">Bar Chart Keuangan</h2>
+                <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Perbandingan pemasukan vs pengeluaran</p>
               </div>
             </div>
 
             <div className="space-y-6">
-              {financeData.map((item, index) => {
-                const IconComponent = item.icon;
-                return (
-                  <div 
-                    key={`${item.category}-${animationKey}`}
-                    className="space-y-4 p-6 bg-gradient-to-br from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-800 rounded-xl border border-gray-100 dark:border-gray-600 hover:shadow-md dark:hover:shadow-lg transition-all duration-300"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center space-x-3">
-                        <IconComponent 
-                          className={`w-5 h-5 ${
-                            item.category === 'Operasional' ? 'text-rose-500 dark:text-rose-400' : 'text-emerald-500 dark:text-emerald-400'
-                          } transition-colors duration-300`} 
-                        />
-                        <span className="font-semibold text-gray-700 dark:text-gray-200 transition-colors duration-300">{item.category}</span>
-                      </div>
-                      <div className="text-right">
-                        <span className="text-lg font-bold text-gray-800 dark:text-white transition-colors duration-300">
-                          {formatCurrency(item.amount)}
-                        </span>
-                        {item.target && (
-                          <p className="text-xs text-gray-500 dark:text-gray-400 transition-colors duration-300">
-                            Target: {formatCurrency(item.target)}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">
-                        <span>Progress</span>
-                        <span>{item.percentage}%</span>
-                      </div>
-                      <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden transition-colors duration-300">
-                        <div 
-                          className={`h-full ${item.color} rounded-full relative transition-all duration-2000 ease-out`}
-                          style={{
-                            width: `${item.percentage}%`
-                          }}
-                        >
-                          <div className="absolute inset-0 bg-white bg-opacity-20 animate-pulse" />
-                        </div>
-                      </div>
-                    </div>
+              {/* Pemasukan Bar */}
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4 bg-emerald-500 rounded"></div>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">Pemasukan</span>
                   </div>
-                );
-              })}
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">
+                    {formatCurrency(transaksiSummary.pemasukan)}
+                  </span>
+                </div>
+                <div className="h-8 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-lg transition-all duration-2000 ease-out relative"
+                    style={{
+                      width: maxValue > 0 ? `${(transaksiSummary.pemasukan / maxValue) * 100}%` : '0%'
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-white bg-opacity-20 animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pengeluaran Bar */}
+              <div className="space-y-3">
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center space-x-2">
+                    <div className="w-4 h-4 bg-red-500 rounded"></div>
+                    <span className="font-medium text-gray-700 dark:text-gray-200">Pengeluaran</span>
+                  </div>
+                  <span className="font-bold text-red-600 dark:text-red-400">
+                    {formatCurrency(transaksiSummary.pengeluaran)}
+                  </span>
+                </div>
+                <div className="h-8 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden">
+                  <div 
+                    className="h-full bg-gradient-to-r from-red-400 to-red-500 rounded-lg transition-all duration-2000 ease-out relative"
+                    style={{
+                      width: maxValue > 0 ? `${(transaksiSummary.pengeluaran / maxValue) * 100}%` : '0%'
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-white bg-opacity-20 animate-pulse"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Summary */}
+              <div className="pt-4 border-t border-gray-200 dark:border-gray-600">
+                <div className="flex justify-between items-center">
+                  <span className="font-semibold text-gray-700 dark:text-gray-200">Selisih:</span>
+                  <span className={`font-bold ${
+                    transaksiSummary.pemasukan - transaksiSummary.pengeluaran >= 0 
+                      ? 'text-emerald-600 dark:text-emerald-400' 
+                      : 'text-red-600 dark:text-red-400'
+                  }`}>
+                    {formatCurrency(transaksiSummary.pemasukan - transaksiSummary.pengeluaran)}
+                  </span>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* Chart Section */}
+          {/* Pie Chart */}
           <div className="rounded-[10px] bg-white dark:bg-gray-800 shadow-1 dark:shadow-card border border-gray-100 dark:border-gray-700 p-8 transition-colors duration-300">
             <div className="flex items-center space-x-3 mb-8">
               <div className="p-3 bg-gradient-to-br from-purple-400 to-pink-500 rounded-xl">
-                <BarChart3 className="w-6 h-6 text-white" />
+                <PieChart className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white transition-colors duration-300">Grafik Keuangan</h2>
-                <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Perbandingan pemasukan, target & pengeluaran</p>
+                <h2 className="text-2xl font-bold text-gray-800 dark:text-white transition-colors duration-300">Pie Chart Keuangan</h2>
+                <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Distribusi pemasukan dan pengeluaran</p>
               </div>
             </div>
 
-            <div className="w-full">
-              {chartData.options && chartData.series && chartData.series.length > 0 && (
-                <div className="space-y-4">
-                  {/* Chart Legend Custom */}
-                  <div className="flex justify-center space-x-6 mb-4">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-emerald-500 rounded"></div>
-                      <span className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">Pemasukan</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-blue-500 rounded"></div>
-                      <span className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">Target</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <div className="w-4 h-4 bg-red-500 rounded"></div>
-                      <span className="text-sm text-gray-600 dark:text-gray-300 transition-colors duration-300">Pengeluaran</span>
-                    </div>
-                  </div>
+            <div className="flex flex-col items-center space-y-6">
+              {/* Custom Pie Chart */}
+              <div className="relative w-48 h-48">
+                <svg viewBox="0 0 42 42" className="w-full h-full transform -rotate-90">
+                  {/* Background Circle */}
+                  <circle
+                    cx="21"
+                    cy="21"
+                    r="15.915"
+                    fill="transparent"
+                    stroke="#e5e7eb"
+                    strokeWidth="3"
+                    className="dark:stroke-gray-600"
+                  />
+                  
+                  {/* Pemasukan Arc */}
+                  <circle
+                    cx="21"
+                    cy="21"
+                    r="15.915"
+                    fill="transparent"
+                    stroke="url(#emerald-gradient)"
+                    strokeWidth="3"
+                    strokeDasharray={`${pemasukanPercentage} ${100 - pemasukanPercentage}`}
+                    strokeDashoffset="0"
+                    className="transition-all duration-2000 ease-out"
+                  />
+                  
+                  {/* Pengeluaran Arc */}
+                  <circle
+                    cx="21"
+                    cy="21"
+                    r="15.915"
+                    fill="transparent"
+                    stroke="url(#red-gradient)"
+                    strokeWidth="3"
+                    strokeDasharray={`${pengeluaranPercentage} ${100 - pengeluaranPercentage}`}
+                    strokeDashoffset={`-${pemasukanPercentage}`}
+                    className="transition-all duration-2000 ease-out"
+                  />
 
-                  {/* Simplified Bar Chart */}
-                  <div className="space-y-4">
-                    {chartData.series[0]?.data?.map((value, index) => (
-                      <div key={index} className="space-y-2">
-                        <div className="flex justify-between text-sm font-medium text-gray-700 dark:text-gray-200 transition-colors duration-300">
-                          <span>{chartData.options?.xaxis.categories[index]}</span>
-                          <span>{formatCurrency(value)}</span>
-                        </div>
-                        <div className="h-8 bg-gray-100 dark:bg-gray-700 rounded-lg overflow-hidden transition-colors duration-300">
-                          <div 
-                            className="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-lg transition-all duration-1000 ease-out relative"
-                            style={{
-                              width: `${(value / Math.max(...(chartData.series[0]?.data || [0]), ...(chartData.series[1]?.data || [0]))) * 100}%`
-                            }}
-                          >
-                            <div className="absolute inset-0 bg-white bg-opacity-20 animate-pulse"></div>
-                          </div>
-                        </div>
-                        <div className="h-2 bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden transition-colors duration-300">
-                          <div 
-                            className="h-full bg-gradient-to-r from-blue-400 to-blue-500 rounded-full transition-all duration-1000 ease-out"
-                            style={{
-                              width: `${chartData.series[1]?.data?.[index] ? (chartData.series[1].data[index] / Math.max(...(chartData.series[1].data || [0]))) * 100 : 0}%`
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                  {/* Gradient Definitions */}
+                  <defs>
+                    <linearGradient id="emerald-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#10b981" />
+                      <stop offset="100%" stopColor="#059669" />
+                    </linearGradient>
+                    <linearGradient id="red-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#ef4444" />
+                      <stop offset="100%" stopColor="#dc2626" />
+                    </linearGradient>
+                  </defs>
+                </svg>
+                
+                {/* Center Text */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Total</p>
+                  <p className="text-sm font-bold text-gray-800 dark:text-white">
+                    {formatCurrency(totalTransaksi)}
+                  </p>
+                </div>
+              </div>
 
-                  {/* Summary Cards */}
-                  <div className="grid grid-cols-2 gap-4 mt-6">
-                    <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 dark:from-emerald-900/20 dark:to-emerald-800/20 p-4 rounded-xl border border-emerald-100 dark:border-emerald-800 transition-colors duration-300">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <TrendingUp className="w-4 h-4 text-emerald-600 dark:text-emerald-400 transition-colors duration-300" />
-                        <span className="text-sm font-medium text-emerald-800 dark:text-emerald-200 transition-colors duration-300">Total Pemasukan</span>
-                      </div>
-                      <p className="text-lg font-bold text-emerald-700 dark:text-emerald-300 transition-colors duration-300">
-                        {formatCurrency(chartData.series[0]?.data?.reduce((a, b) => a + b, 0) || 0)}
-                      </p>
-                    </div>
-                    <div className="bg-gradient-to-br from-rose-50 to-rose-100 dark:from-rose-900/20 dark:to-rose-800/20 p-4 rounded-xl border border-rose-100 dark:border-rose-800 transition-colors duration-300">
-                      <div className="flex items-center space-x-2 mb-2">
-                        <TrendingDown className="w-4 h-4 text-rose-600 dark:text-rose-400 transition-colors duration-300" />
-                        <span className="text-sm font-medium text-rose-800 dark:text-rose-200 transition-colors duration-300">Total Pengeluaran</span>
-                      </div>
-                      <p className="text-lg font-bold text-rose-700 dark:text-rose-300 transition-colors duration-300">
-                        {formatCurrency(12300000)}
-                      </p>
-                    </div>
+              {/* Legend */}
+              <div className="space-y-4 w-full">
+                <div className="flex items-center justify-between p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-4 h-4 bg-emerald-500 rounded-full"></div>
+                    <span className="font-medium text-emerald-800 dark:text-emerald-200">Pemasukan</span>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-emerald-700 dark:text-emerald-300">
+                      {formatCurrency(transaksiSummary.pemasukan)}
+                    </p>
+                    <p className="text-xs text-emerald-600 dark:text-emerald-400">
+                      {pemasukanPercentage.toFixed(1)}%
+                    </p>
                   </div>
                 </div>
-              )}
+
+                <div className="flex items-center justify-between p-3 bg-red-50 dark:bg-red-900/20 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-4 h-4 bg-red-500 rounded-full"></div>
+                    <span className="font-medium text-red-800 dark:text-red-200">Pengeluaran</span>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold text-red-700 dark:text-red-300">
+                      {formatCurrency(transaksiSummary.pengeluaran)}
+                    </p>
+                    <p className="text-xs text-red-600 dark:text-red-400">
+                      {pengeluaranPercentage.toFixed(1)}%
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Info */}
+              <div className="grid grid-cols-2 gap-4 w-full mt-4">
+                <div className="text-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Saldo</p>
+                  <p className={`font-bold ${
+                    transaksiSummary.total_saldo >= 0 
+                      ? 'text-emerald-600 dark:text-emerald-400' 
+                      : 'text-red-600 dark:text-red-400'
+                  }`}>
+                    {formatCurrency(transaksiSummary.total_saldo)}
+                  </p>
+                </div>
+                <div className="text-center p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg">
+                  <p className="text-xs text-gray-500 dark:text-gray-400">Draft</p>
+                  <p className="font-bold text-orange-600 dark:text-orange-400">
+                    {transaksiSummary.draft}
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
