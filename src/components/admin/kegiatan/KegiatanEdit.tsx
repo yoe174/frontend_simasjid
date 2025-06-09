@@ -125,17 +125,42 @@ export default function KegiatanEditPage() {
                 onChange={handleChange}
                 required
               />
-              <DatePickerOne
+              <InputGroup
+                label="Tanggal"
+                name="tanggal"
+                placeholder=""
+                type="date"
+                value={form.tanggal}
+                onChange={handleChange}
+                required
+              />
+              {/* <DatePickerOne
                 label="Tanggal"
                 name="tanggal"
                 value={form.tanggal}
                 onChange={(name, value) => setForm({ ...form, [name]: value })}
-              />
+              /> */}
             </div>
 
             {/* Baris 2 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <TimePickerAntd
+              <InputGroup
+                  label="Waktu Mulai"
+                  name="waktu_mulai"
+                  placeholder=""
+                  type="time"
+                  value={form.waktu_mulai}
+                  onChange={handleChange}
+                />
+                <InputGroup
+                  label="Waktu Selesai"
+                  name="waktu_selesai"
+                  placeholder=""
+                  type="time"
+                  value={form.waktu_selesai}
+                  onChange={handleChange}
+                />              
+              {/* <TimePickerAntd
                 label="Waktu Mulai"
                 name="waktu_mulai"
                 value={form.waktu_mulai}
@@ -146,7 +171,7 @@ export default function KegiatanEditPage() {
                 name="waktu_selesai"
                 value={form.waktu_selesai}
                 onChange={(name, value) => setForm({ ...form, [name]: value })}
-              />
+              /> */}
             </div>
 
             {/* Baris 3 */}
