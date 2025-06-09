@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export function Logo() {
   return (
-    <div className="relative h-8 max-w-[10.847rem]">
+    <div className="relative h-16 max-w-[18rem]"> {/* Lebih besar lagi */}
       <Image
         src="/image/logobaru.png"
         fill

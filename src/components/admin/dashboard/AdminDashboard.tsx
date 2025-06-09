@@ -306,9 +306,9 @@ const AdminDashboard = () => {
               <p className="text-gray-600 dark:text-gray-300 text-lg transition-colors duration-300">
                 Selamat datang di Dashboard Sistem Informasi Masjid
               </p>
-              <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
+              {/* <p className="text-sm text-gray-500 dark:text-gray-400 transition-colors duration-300">
                 Data akan otomatis terupdate setiap 30 detik
-              </p>
+              </p> */}
             </div>
             
             <div className="bg-gradient-to-br from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 p-4 rounded-xl border border-emerald-100 dark:border-emerald-800 transition-colors duration-300">
@@ -365,7 +365,7 @@ const AdminDashboard = () => {
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-800 dark:text-white transition-colors duration-300">Bar Chart Keuangan</h2>
-                <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Perbandingan pemasukan vs pengeluaran</p>
+                <p className="text-gray-600 dark:text-gray-300 transition-colors duration-300">Perbandingan pemasukan dan pengeluaran</p>
               </div>
             </div>
 
