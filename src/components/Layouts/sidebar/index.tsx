@@ -6,6 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { NAV_DATA } from "./data";
+import { getFilteredNavData } from "./data"; // ⬅️ Import fungsi baru
+import { useAuth } from "@/hooks/useAuth"; // ⬅️ Import useAuth hook
 // import { ArrowLeftIcon, ChevronUp } from "./icons";
 import { MenuItem } from "./menu-item";
 import { useSidebarContext } from "./sidebar-context";
@@ -14,6 +16,12 @@ export function Sidebar() {
   const pathname = usePathname();
   const { setIsOpen, isOpen, isMobile, toggleSidebar } = useSidebarContext();
   const [expandedItems, setExpandedItems] = useState<string[]>([]);
+
+  // ⬅️ Gunakan useAuth hook
+  const { user, isSuperAdmin, isLoading } = useAuth();
+  
+  // ⬅️ Dapatkan nav data yang sudah difilter berdasarkan role
+  const NAV_DATA = getFilteredNavData(isSuperAdmin);
 
   const toggleExpanded = (title: string) => {
     setExpandedItems((prev) => (prev.includes(title) ? [] : [title]));
@@ -47,6 +55,23 @@ export function Sidebar() {
       });
     });
   }, [pathname, expandedItems]);
+
+  // ⬅️ Tampilkan loading state jika sedang mengambil data auth
+  if (isLoading) {
+    return (
+      <aside
+        className={cn(
+          "max-w-[290px] overflow-hidden border-r border-gray-200 bg-white transition-[width] duration-200 ease-linear dark:border-gray-800 dark:bg-gray-dark",
+          isMobile ? "fixed bottom-0 top-0 z-50" : "sticky top-0 h-screen",
+          isOpen ? "w-full" : "w-0",
+        )}
+      >
+        <div className="flex h-full items-center justify-center">
+          <div className="text-sm text-gray-500">Loading...</div>
+        </div>
+      </aside>
+    );
+  }
 
   return (
     <>
@@ -137,7 +162,7 @@ export function Sidebar() {
                                   <li key={subItem.title} role="none">
                                     <MenuItem
                                         as="link"
-                                        href={subItem.url ?? "/"}
+                                        href={subItem.url ?? "/admin"}
                                         isActive={pathname === subItem.url}
                                       >
                                         <span>{subItem.title}</span>
