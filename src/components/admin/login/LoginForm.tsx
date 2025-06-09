@@ -157,7 +157,7 @@ const LoginForm: React.FC = () => {
 
           <div className="flex items-center justify-between">
             <div className="flex items-center">
-              <input
+              {/* <input
                 id="remember-me"
                 name="remember-me"
                 type="checkbox"
@@ -165,18 +165,18 @@ const LoginForm: React.FC = () => {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="h-4 w-4 text-blue-600 bg-slate-700 border-slate-600 rounded focus:ring-blue-500 focus:ring-2"
                 disabled={isLoading}
-              />
-              <label htmlFor="remember-me" className="ml-2 text-sm text-slate-300">
+              /> */}
+              {/* <label htmlFor="remember-me" className="ml-2 text-sm text-slate-300">
                 Remember me
-              </label>
+              </label> */}
             </div>
-            <a 
+            {/* <a 
               href="/forgot-password" 
               className="text-sm text-blue-400 hover:text-blue-300 transition-colors duration-200"
               tabIndex={isLoading ? -1 : 0}
             >
               Forgot Password?
-            </a>
+            </a> */}
           </div>
 
           <button
@@ -219,14 +219,14 @@ const LoginForm: React.FC = () => {
           </button>
 
           <div className="text-center">
-            <span className="text-slate-400 text-sm">Don't have an account? </span>
+            {/* <span className="text-slate-400 text-sm">Don't have an account? </span>
             <a 
               href="/register" 
               className="text-blue-400 hover:text-blue-300 text-sm font-medium transition-colors duration-200"
               tabIndex={isLoading ? -1 : 0}
             >
               Sign Up
-            </a>
+            </a> */}
           </div>
         </form>
       </div>

@@ -9,7 +9,7 @@ const Logo: React.FC = () => {
       <div className="relative">
         <div className="flex items-center h-20 relative z-10">
                   <Image
-                    src="/image/logomasjid2.png" 
+                    src="/image/logobaru.png" 
                         alt="Masjid Raya Al-Muhajjirin Logo"
                     width={200}
                     height={200}

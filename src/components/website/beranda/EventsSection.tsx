@@ -26,7 +26,7 @@ const EventsSection = () => {
   const [error, setError] = useState<string | null>(null);
 
   // Base URL untuk API - menggunakan environment variable
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000';
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL ;
 
   // Function untuk menentukan status berdasarkan tanggal
   const getAutoStatus = (eventDate: string): 'dijadwalkan' | 'dilaksanakan' | 'selesai' => {
