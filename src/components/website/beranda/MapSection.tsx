@@ -6,7 +6,7 @@ const MapSection: React.FC = () => {
     <section id="lokasimasjid" className="bg-gray-100">
     <div className="w-full bg-gradient-to-b from-slate-800 via-slate-900 to-slate-800 text-white p-6">
       <div className="flex flex-col items-center mb-4">
-        <h1 className="text-2xl font-bold text-yellow-500">Lokasi Masjid Al-Muhajirin</h1>
+        <h1 className="text-2xl font-bold text-yellow-500">Lokasi Masjid Al Muslimun</h1>
         <p className="text-sm text-gray-300"></p>
       </div>
 
@@ -25,7 +25,7 @@ const MapSection: React.FC = () => {
               </div>
               <div>
                 <h3 className="font-bold">Lokasi</h3>
-                <p className="text-sm">Jl. Perum Joyo Grand, RW.08, Merjosari, Kec. Lowokwaru, Kota Malang, Jawa Timur 65144</p>
+                <p className="text-sm">Jl. Cengger Ayam DLM No.67, Tulusrejo, Kec. Lowokwaru, Kota Malang, Jawa Timur 65141</p>
               </div>
             </div>
 
@@ -50,7 +50,7 @@ const MapSection: React.FC = () => {
               </div>
               <div>
                 <h3 className="font-bold">Email</h3>
-                <p className="text-sm">masjidalmuhajirin@gmail.com</p>
+                <p className="text-sm">masjidalmuslimun@gmail.com</p>
               </div>
             </div>
           </div>

@@ -32,9 +32,9 @@ const HeroSection = () => {
           transition={{ delay: 0.5, duration: 1 }}
           className="max-w-2xl text-sm md:text-base text-white font-serif font-semibold"
         >
-          Selamat Datang di Masjid Al Muhajjirin Vila Mutiara Cikarang. Masjid yang pertama
+          Selamat Datang di Masjid Al Muslimun. Masjid yang pertama
           dibangun tahun 2003 dan mengalami renovasi total pada tahun 2018 yang
-          berlokasi di Jl. Perum Joyo Grand, RW.08, Merjosari, Kec. Lowokwaru, Kota Malang, Jawa Timur 65144.
+          berlokasi di Jl. Cengger Ayam DLM No.67, Tulusrejo, Kec. Lowokwaru, Kota Malang, Jawa Timur 65141
         </motion.p>
       </div>
     </section>
