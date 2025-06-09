@@ -9,7 +9,7 @@ const rawNavData = [
     items: [
       {
         title: "Dashboard",
-        url: "/",
+        url: "/dashboard",
         icon: Home,
         items: [],
       },

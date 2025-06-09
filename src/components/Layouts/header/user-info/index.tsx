@@ -86,7 +86,7 @@ export function UserInfo() {
 
         <hr className="border-[#E8E8E8] dark:border-dark-3" />
 
-        <div className="p-2 text-base text-[#4B5563] dark:text-dark-6 [&>*]:cursor-pointer">
+        {/* <div className="p-2 text-base text-[#4B5563] dark:text-dark-6 [&>*]:cursor-pointer">
           <Link
             href={"/profile"}
             onClick={() => setIsOpen(false)}
@@ -95,7 +95,7 @@ export function UserInfo() {
             <UserIcon />
             <span className="mr-auto text-base font-medium">View profile</span>
           </Link>
-        </div>
+        </div> */}
 
         <hr className="border-[#E8E8E8] dark:border-dark-3" />
 
