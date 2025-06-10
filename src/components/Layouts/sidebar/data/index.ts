@@ -39,7 +39,7 @@ const rawNavData: NavSection[] = [
         items: [],
       },
       {
-        title: "kegiatan",
+        title: "Kegiatan",
         url: "/kegiatan",
         icon: Calendar,
         items: [],

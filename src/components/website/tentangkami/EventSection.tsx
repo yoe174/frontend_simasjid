@@ -156,11 +156,6 @@ const InformasiSection = () => {
                     (e.target as HTMLImageElement).src = '/image/default-info.jpg';
                   }}
                 />
-                <div className="absolute top-4 right-4 z-20">
-                  <span className="bg-gradient-to-r from-amber-400 to-orange-500 text-black px-3 py-1 rounded-full text-xs font-bold">
-                    TERBARU
-                  </span>
-                </div>
               </div>
 
               {/* Content */}
