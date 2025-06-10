@@ -21,10 +21,10 @@ const ReservationSection: React.FC = () => {
           {/* Left Content */}
           <div className="w-full md:w-1/2 md:pr-8 mb-8 md:mb-0">
             <h2 className="text-3xl font-bold text-white mb-4 border-b-2 border-amber-500 pb-2 inline-block">
-              Reservasi Masjid Al-Muhajjirin
+              Reservasi Masjid Al Muslimun
             </h2>
             <p className="text-white mt-6">
-              Temukan berbagai layanan dan fasilitas yang tersedia di Masjid Al-Muhajjirin. Rencanakan kunjungan atau partisipasi Anda dengan reservasi sekarang!
+              Temukan berbagai layanan dan fasilitas yang tersedia di Masjid Al Muslimun. Rencanakan kunjungan atau partisipasi Anda dengan reservasi sekarang!
             </p>
             <p className="text-white mt-6">
             Kami menyediakan layanan reservasi Masjid untuk keperluan bersama dan tidak merugikan pihak manapun seperti acara akad, pengajian, buka bersama, dan lain lain yang masih berkaitan dengan kegiatan keagamaan.
