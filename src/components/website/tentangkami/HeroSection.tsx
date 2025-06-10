@@ -89,9 +89,9 @@ const HeroSection = () => {
               <p className={`text-lg transform transition-all duration-1000 ease-out delay-1000 ${
                 isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               } hover:text-white transition-colors duration-300`}>
-                Masjid Al-Ikhlash merupakan sebuah Masjid sederhana yang dibangun di 
-                atas lahan fasilitas umum (fasum) di Perumahan Vila Mutiara Cikarang 
-                Blok A. Bangunan Masjid seluas ± 210 m2 mulai dibangun pada tahun 2003 
+                Masjid Al Muslimun merupakan sebuah Masjid sederhana yang dibangun di 
+                atas lahan fasilitas umum di Jl. Cengger Ayam DLM No.67, Tulusrejo, Kec. Lowokwaru, Kota Malang, Jawa Timur 65141.
+                Bangunan Masjid seluas ± 210 m2 mulai dibangun pada tahun 2003 
                 melalui sumbangan tanah fasum dari pengembang dan dana swadaya 
                 masyarakat.
               </p>
