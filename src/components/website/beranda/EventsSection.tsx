@@ -236,10 +236,10 @@ const EventsSection = () => {
         {/* Header */}
         <div className="text-center mb-16">
           <h2 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-amber-400 via-orange-500 to-pink-500 text-transparent bg-clip-text">
-            Berita Acara
+            Kegiatan Masjid
           </h2>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            Dokumentasi kegiatan dan acara terkini dari komunitas kami
+            Kegiatan yang berlangsung di lingkungan Masjid Al-Muslimun
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-amber-400 to-pink-500 mx-auto mt-6 rounded-full"></div>
         </div>

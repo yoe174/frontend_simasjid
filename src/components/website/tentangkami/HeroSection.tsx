@@ -99,8 +99,8 @@ const HeroSection = () => {
               <p className={`text-lg transform transition-all duration-1000 ease-out delay-1200 ${
                 isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
               } hover:text-white transition-colors duration-300`}>
-                Pada tahun 2018 Masjid Al Ikhlash mengalami renovasi total menjadi dua 
-                lantai dengan desain baru yang lebih artistik dan modern. Renovasi total 
+                Pada tahun 2020 Masjid Al Muslimun mengalami renovasi total menjadi lebih luas
+                dengan desain baru yang lebih artistik dan modern. Renovasi total 
                 menghabiskan anggaran sekitar Rp 1.7 M dengan menggunakan dana 
                 infaq dan swadaya murni dari jama'ah masjid, selesai pekerjaan renovasi 
                 selama sembilan bulan.
