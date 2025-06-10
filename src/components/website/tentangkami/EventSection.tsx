@@ -124,7 +124,7 @@ const InformasiSection = () => {
             Informasi Terkini
           </h2>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            Berita dan informasi terbaru dari komunitas kami
+            Berita dan informasi terbaru dari Masjid Al-Muslimun
           </p>
           <div className="w-24 h-1 bg-gradient-to-r from-amber-400 to-pink-500 mx-auto mt-6 rounded-full"></div>
         </div>

@@ -1,10 +1,10 @@
 // app/layout.tsx
-// import './globals.css'
 import type { Metadata } from 'next'
+// import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Aplikasi Saya',
-  description: 'Deskripsi aplikasi kamu',
+  title: 'Masjid Al-Muslimun',
+  description: 'Semua informasi tentang Masjid Al-Muslimun',
 }
 
 export default function RootLayout({
@@ -14,7 +14,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id">
-      <body className="bg-gray-100 text-gray-900">{children}</body>
+      <head>
+        {/* Favicon */}
+        <link rel="icon" href="/image/masjid-favicon.ico" />
+      </head>
+      <body className="bg-gray-100 text-gray-900">
+        {children}
+      </body>
     </html>
   )
 }
