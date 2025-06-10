@@ -14,7 +14,6 @@ const Navbar = () => {
     { name: "Beranda", href: "/website/beranda" },
     { name: "Tentang Kami", href: "/website/tentangkami" },
     { name: "Reservasi", href: "/website/reservasi" },
-    { name: "Login Admin", href: "/login/login" },
   ];
 
   useEffect(() => {
@@ -82,8 +81,23 @@ const Navbar = () => {
           ))}
         </div>
 
-        {/* Contact/CTA Button */}
-        <div className="hidden md:flex items-center">
+        {/* Action Buttons */}
+        <div className="hidden md:flex items-center gap-3">
+          {/* Login Admin Button */}
+          <Link href="/login/login">
+            <button className={`flex items-center gap-2 px-5 py-2.5 rounded-full font-medium transition-all duration-300 transform hover:scale-105 border-2 ${
+              isScrolled
+                ? 'border-slate-300 text-slate-700 hover:bg-slate-50 hover:border-slate-400 hover:shadow-md'
+                : 'border-white/40 text-white hover:bg-white/10 hover:border-white/60'
+            }`}>
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              </svg>
+              <span className="text-sm">Login Admin</span>
+            </button>
+          </Link>
+
+          {/* WhatsApp Button */}
           <a 
             href="https://wa.me/6282268608092?text=Assalamualaikum%2C%20saya%20ingin%20bertanya%20tentang%20Masjid%20Raya%20Al-Muhajjirin"
             target="_blank"
@@ -140,13 +154,28 @@ const Navbar = () => {
                   </div>
                 </Link>
               ))}
+              
+              {/* Mobile Login Admin Button */}
+              <Link href="/login/login">
+                <button 
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 border-2 border-slate-300 text-slate-700 rounded-lg font-medium hover:bg-slate-50 transition-colors duration-200"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                  </svg>
+                  Login Admin
+                </button>
+              </Link>
+
+              {/* Mobile WhatsApp Button */}
               <a 
                 href="https://wa.me/6282268608092?text=Assalamualaikum%2C%20saya%20ingin%20bertanya%20tentang%20Masjid%20Raya%20Al-Muhajjirin"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <button 
-                  className="flex items-center justify-center gap-2 w-full mt-4 px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-semibold shadow-lg"
+                  className="flex items-center justify-center gap-2 w-full px-6 py-3 bg-gradient-to-r from-green-500 to-green-600 text-white rounded-lg font-semibold shadow-lg"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
