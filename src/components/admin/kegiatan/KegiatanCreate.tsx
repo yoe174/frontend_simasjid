@@ -49,7 +49,7 @@ export default function CreateKegiatanPage() {
     setLoading(true);
     setError("");
 
-    const requiredFields = ["nama_kegiatan", "isi", "tanggal", "lokasi", "status"];
+    const requiredFields = ["nama_kegiatan", "isi", "tanggal", "lokasi"];
     for (let field of requiredFields) {
       if (!form[field as keyof typeof form]) {
         setError("Kolom bertanda * wajib diisi");
@@ -103,14 +103,14 @@ export default function CreateKegiatanPage() {
                 required
               />
               <InputGroup
-                label="Tanggal"
-                name="tanggal"
-                placeholder=""
-                type="date"
-                value={form.tanggal}
+                label="Lokasi"
+                name="lokasi"
+                type="text"
+                placeholder="Masukkan lokasi kegiatan"
+                value={form.lokasi}
                 onChange={handleChange}
                 required
-              />
+              /> 
               {/* <DatePickerOne
                 label="Tanggal"
                 name="tanggal"
@@ -121,6 +121,16 @@ export default function CreateKegiatanPage() {
 
             {/* Baris 2 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <InputGroup
+                label="Tanggal"
+                name="tanggal"
+                placeholder=""
+                type="date"
+                value={form.tanggal}
+                onChange={handleChange}
+                required
+              />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <InputGroup
                   label="Waktu Mulai"
                   name="waktu_mulai"
@@ -137,6 +147,8 @@ export default function CreateKegiatanPage() {
                   value={form.waktu_selesai}
                   onChange={handleChange}
                 />
+              </div>
+                
                 {/* <TimePickerAntd
                     label="Waktu Mulai"
                     name="waktu_mulai"
@@ -152,8 +164,8 @@ export default function CreateKegiatanPage() {
                 /> */}
             </div>
             {/* Baris 3 */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <InputGroup
+            {/* <div className="grid grid-cols-1 md:grid-cols-2 gap-5"> */}
+              {/* <InputGroup
                 label="Lokasi"
                 name="lokasi"
                 type="text"
@@ -161,8 +173,8 @@ export default function CreateKegiatanPage() {
                 value={form.lokasi}
                 onChange={handleChange}
                 required
-              />
-              <Select
+              /> */}
+              {/* <Select
                 label="Status"
                 placeholder="Pilih Status"
                 value={form.status}
@@ -173,13 +185,13 @@ export default function CreateKegiatanPage() {
                   { value: "selesai", label: "selesai" },
                   { value: "dibatalkan", label: "dibatalkan" },
                 ]}
-              />
-            </div>
+              /> */}
+            {/* </div> */}
 
             {/* Baris 4 */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <TextAreaGroup
-                label="Isi *"
+                label="Isi"
                 name="isi"
                 placeholder="Isi kegiatan"
                 value={form.isi}
