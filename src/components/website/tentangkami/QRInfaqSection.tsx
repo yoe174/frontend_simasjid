@@ -63,7 +63,7 @@ const QRInfaqSection = () => {
             <div className="space-y-5">
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20">
                 <p className="text-slate-200 leading-relaxed">
-                  Masjid Al Muhajirin menyediakan fasilitas <span className="text-amber-400 font-semibold">Infaq</span> bagi Jama'ah Masjid dengan 
+                  Masjid Al Muslimun menyediakan fasilitas <span className="text-amber-400 font-semibold">Infaq</span> bagi Jama'ah Masjid dengan 
                   menggunakan QR Scan Barcode, disamping fasilitas kotak infaq yang 
                   sudah tersedia terlebih dahulu.
                 </p>
@@ -71,7 +71,7 @@ const QRInfaqSection = () => {
               
               <div className="bg-white/10 backdrop-blur-sm rounded-xl p-5 border border-white/20">
                 <p className="text-slate-200 leading-relaxed">
-                  Infaq melalui <span className="text-amber-400 font-semibold">QRIS / QR Scan</span> di Masjid Al Muhajirin adalah berinfaq dengan 
+                  Infaq melalui <span className="text-amber-400 font-semibold">QRIS / QR Scan</span> di Masjid Al Muslimun adalah berinfaq dengan 
                   metode Scan Barcode dan pembayarannya melalui payment gateway 
                   seperti berbagai aplikasi digital dan Mobile Banking Jama'ah.
                 </p>
@@ -79,7 +79,7 @@ const QRInfaqSection = () => {
               
               <div className="bg-gradient-to-r from-amber-500/20 to-yellow-500/20 backdrop-blur-sm rounded-xl p-5 border border-amber-400/30">
                 <p className="text-white leading-relaxed font-medium">
-                  Semakin mudah berinfaq dan beribadah di <span className="text-amber-300">Masjid Al Muhajirin Vila Mutiara Cikarang</span>.
+                  Semakin mudah berinfaq dan beribadah di <span className="text-amber-300">Masjid Al Muslimun</span>.
                 </p>
               </div>
             </div>
