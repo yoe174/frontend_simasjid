@@ -276,6 +276,28 @@ export default function TransaksiEditPage() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
+  // Handler khusus untuk nominal yang hanya menerima angka positif
+  const handleNominalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    
+    // Hanya izinkan angka dan titik desimal
+    const numericValue = value.replace(/[^0-9.]/g, '');
+    
+    // Pastikan hanya ada satu titik desimal
+    const parts = numericValue.split('.');
+    let finalValue = parts[0];
+    if (parts.length > 1) {
+      finalValue += '.' + parts.slice(1).join('');
+    }
+    
+    // Pastikan tidak ada angka 0 di depan kecuali untuk desimal
+    if (finalValue.length > 1 && finalValue[0] === '0' && finalValue[1] !== '.') {
+      finalValue = finalValue.substring(1);
+    }
+    
+    setForm({ ...form, nominal: finalValue });
+  };
+
   const handleJenisTransaksiChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const jenisId = e.target.value;
     setForm({ ...form, jenis_transaksi_id: jenisId });
@@ -314,8 +336,17 @@ export default function TransaksiEditPage() {
     setLoading(true);
     setError("");
 
+    // Validasi field wajib
     if (!form.kategori || !form.jenis_transaksi_id || !form.nominal || !form.status) {
-      setError("Semua field bertanda * wajib diisi.");
+      setError("Kategori, Jenis Transaksi, Nominal, dan Status wajib diisi.");
+      setLoading(false);
+      return;
+    }
+
+    // Validasi nominal harus lebih dari 0
+    const nominal = parseFloat(form.nominal);
+    if (isNaN(nominal) || nominal <= 0) {
+      setError("Nominal harus berupa angka yang lebih dari 0.");
       setLoading(false);
       return;
     }
@@ -335,7 +366,7 @@ export default function TransaksiEditPage() {
         method: "PUT",
         body: JSON.stringify({
           ...form,
-          nominal: parseFloat(form.nominal),
+          nominal: nominal,
         }),
       });
 
@@ -404,7 +435,7 @@ export default function TransaksiEditPage() {
             {/* Kategori, Jenis Transaksi & Status */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               <Select
-                label="Kategori"
+                label="Kategori *"
                 placeholder="Pilih Kategori"
                 value={form.kategori}
                 onChange={(e) => setForm({ ...form, kategori: e.target.value })}
@@ -415,7 +446,7 @@ export default function TransaksiEditPage() {
               />
               <div>
                 <Select
-                  label="Jenis Transaksi"
+                  label="Jenis Transaksi *"
                   placeholder="Pilih Jenis"
                   value={form.jenis_transaksi_id}
                   onChange={handleJenisTransaksiChange}
@@ -434,7 +465,7 @@ export default function TransaksiEditPage() {
                 )}
               </div>
               <Select
-                label="Status"
+                label="Status *"
                 placeholder="Pilih Status"
                 value={form.status}
                 onChange={(e) => setForm({ ...form, status: e.target.value })}
@@ -449,13 +480,12 @@ export default function TransaksiEditPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
               <div>
                 <InputGroup
-                  label="Nominal"
+                  label="Nominal *"
                   name="nominal"
-                  type="number"
+                  type="text"
                   placeholder="Masukkan nominal"
                   value={form.nominal}
-                  onChange={handleChange}
-                  required
+                  onChange={handleNominalChange}
                 />
                 {/* Warning saldo tidak mencukupi */}
                 {saldoWarning && (
